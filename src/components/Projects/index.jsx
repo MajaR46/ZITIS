@@ -2,123 +2,125 @@ import React, { useState } from "react";
 import Navbar from "../Navbar";
 import { Link } from "react-router-dom";
 import "./index.css";
-import Job from "./../../Assets/jobs.json";
-import Filter from "../Filter";
+import ProjectData from "./../../Assets/projects.json";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-
-const experience = [
-  { min: 0, max: 1 },
-  { min: 2, max: 3 },
-  { min: 4, max: 5 },
-  { min: 5, max: 10 },
-];
+import ProjectFilter from "../ProjectFilter";
 
 const Projects = () => {
-  const JobData = JSON.parse(localStorage.getItem("item")) || [];
-  const [filteredJobs, setFilteredJobs] = useState([...JobData, ...Job]);
-  const [searchterm, setSearchTerm] = useState("");
+  const savedProjects = JSON.parse(localStorage.getItem("projects")) || [];
+  const [filteredProjects, setFilteredProjects] = useState([
+    ...savedProjects,
+    ...ProjectData,
+  ]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [active, setActive] = useState(false);
-  function handleJobFilter(event) {
-    const value = event.target.innerText;
-    event.preventDefault();
-    setFilteredJobs(
-      Job.filter((job) => {
-        return job.role === value;
-      })
-    );
+
+  function saveProject(
+    id,
+    projectTitle,
+    projectDescription,
+    projectStatus,
+    uploadDate,
+    userId,
+    __v
+  ) {
+    const projectData = {
+      id,
+      projectTitle,
+      projectDescription,
+      projectStatus,
+      uploadDate,
+      userId,
+      __v,
+    };
+
+    window.localStorage.setItem("SavedProject", JSON.stringify(projectData));
+    console.log(projectData);
   }
-  function saveClick(id, logo, company, position, location, posted) {
-    window.localStorage.setItem(
-      "Job",
-      JSON.stringify(id, logo, company, position, location, posted)
-    );
-    console.log(JobData);
-  }
+
   const searchEvent = (event) => {
     const data = event.target.value;
     setSearchTerm(data);
-    if (searchterm !== "" || searchterm.length > 2) {
-      const filterData = Job.filter((item) => {
-        if (item) {
-          return Object.values(item)
+    if (searchTerm !== "" || searchTerm.length > 2) {
+      const filterData = ProjectData.filter((project) => {
+        if (project) {
+          return Object.values(project)
             .join("")
             .toLowerCase()
-            .includes(searchterm.toLowerCase());
+            .includes(searchTerm.toLowerCase());
         } else {
           return 0;
         }
       });
-      setFilteredJobs(filterData);
+      setFilteredProjects(filterData);
     } else {
-      setFilteredJobs(Job);
+      setFilteredProjects(ProjectData);
     }
   };
-  function handleExperienceFilter(checkedState) {
-    let filters = [];
-    checkedState.forEach((item, index) => {
-      if (item === true) {
-        const filterS = Job.filter((job) => {
-          return (
-            job.experience >= experience[index].min &&
-            job.experience <= experience[index].max
-          );
-        });
-        filters = [...filters, ...filterS];
-      }
-      setFilteredJobs(filters);
-    });
+
+  function handleStatusFilter(selectedStatus) {
+    if (selectedStatus.length === 0 || selectedStatus.includes("All")) {
+      setFilteredProjects(ProjectData);
+      return;
+    }
+    const filtered = ProjectData.filter((project) =>
+      selectedStatus.includes(project.projectStatus)
+    );
+    setFilteredProjects(filtered);
   }
+
   return (
     <>
       <Navbar />
       <div className="jobs-for-you">
         <div className="job-background">
           <div className="title">
-            <h2>Our Jobs</h2>
+            <h2>Discover Projects</h2>
           </div>
         </div>
         <div className="job-section">
           <div className="job-page">
-            {filteredJobs.map(
-              ({ id, logo, company, position, location, posted, role }) => {
+            {filteredProjects.map(
+              ({
+                id,
+                projectTitle,
+                projectDescription,
+                projectStatus,
+                uploadDate,
+                userId,
+                __v,
+              }) => {
                 return (
-                  <div className="job-list">
+                  <div className="job-list" key={id}>
                     <div className="job-card">
                       <div className="job-name">
-                        <img
-                          src={
-                            logo.length > 20
-                              ? logo
-                              : require(`../../Assets/images/${logo}`)
-                          }
-                          alt="logo"
-                          className="job-profile"
-                        />
                         <div className="job-detail">
-                          <h4>{company}</h4>
-                          <h3>{position}</h3>
+                          <h4>{projectTitle}</h4>
+                          <p>{projectDescription}</p>
                           <div className="category">
-                            <p>{location}</p>
-                            <p>{role}</p>
+                            <p>Status: {projectStatus}</p>
+                            <p>Uploaded: {uploadDate}</p>
+                            <p>User ID: {userId}</p>
                           </div>
                         </div>
                       </div>
                       <div className="job-button">
                         <div className="job-posting">
-                          <Link to="/apply-jobs">Apply Now</Link>
+                          <Link to="/send-inquiry">View project</Link>
                         </div>
                         <div className="save-button">
                           <Link
-                            to="/Jobs"
+                            to="/Projects"
                             onClick={() => {
-                              saveClick(
+                              saveProject(
                                 {
                                   id,
-                                  logo,
-                                  company,
-                                  position,
-                                  location,
-                                  posted,
+                                  projectTitle,
+                                  projectDescription,
+                                  projectStatus,
+                                  uploadDate,
+                                  userId,
+                                  __v,
                                 },
                                 setActive(!active)
                               );
@@ -140,10 +142,8 @@ const Projects = () => {
             )}
           </div>
 
-          <Filter
-            setFilteredJobs={setFilteredJobs}
-            handleJobFilter={handleJobFilter}
-            handleExperienceFilter={handleExperienceFilter}
+          <ProjectFilter
+            handleStatusFilter={handleStatusFilter}
             searchEvent={searchEvent}
           />
         </div>

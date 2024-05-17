@@ -9,6 +9,7 @@ import ErrorPage from "./components/ErrorPage";
 import ApplyJobs from "./components/ApplyJobs";
 import Projects from "./components/Projects";
 import AddProject from "./components/AddProjects";
+import SendInquiry from "./components/SendInquiry";
 
 function App() {
   return (
@@ -23,8 +24,9 @@ function App() {
             <Route path="/apply-jobs" element={<ApplyJobs />} />
             <Route path="/saved-job" element={<SaveJobs />} />
             <Route path="/discussion" element={<Discussion />} />
-            <Route path="/my-projects" element={<Projects />} />
+            <Route path="/projects" element={<Projects />} />
             <Route path="/add-projects" element={<AddProject />} />
+            <Route path="/send-inquiry" element={<SendInquiry />} />
             <Route path="*" element={<ErrorPage />} />
           </Route>
         </Routes>
