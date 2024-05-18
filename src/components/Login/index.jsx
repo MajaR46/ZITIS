@@ -20,7 +20,6 @@ const Login = () => {
         const { email, password } = formData;
         const user = users.find(user => user.email === email && user.password === password);
         if (user) {
-            // Store user data in session storage
             sessionStorage.setItem('user', JSON.stringify(user));
             alert("Login successful!");
             navigate("/Profile");
@@ -74,7 +73,7 @@ const Login = () => {
                             Login
                         </button>
                         <p>Don't have an account?</p>
-                        <button className="profile-button" onClick={handleRegister}>Register</button> {/* Register button */}
+                        <button className="profile-button" onClick={handleRegister}>Register</button> { }
                     </div>
                 </form>
             </div>
