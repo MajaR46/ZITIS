@@ -13,6 +13,7 @@ import Profile from "./components/Profile";
 import Register from "./components/Registration";
 import Login from "./components/Login";
 import SendInquiry from "./components/SendInquiry";
+import MyProjects from "./components/MyProjects";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/registration" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/my-projects" element={<MyProjects />} />
 
             <Route path="/send-inquiry" element={<SendInquiry />} />
             <Route path="*" element={<ErrorPage />} />
