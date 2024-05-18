@@ -1,18 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar";
 import { Link } from "react-router-dom";
 import "./index.css";
 import ProjectData from "./../../Assets/projects.json";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import ProjectFilter from "../ProjectFilter";
 
-const Projects = () => {
+const MyProjects = () => {
   const savedProjects = JSON.parse(localStorage.getItem("projects")) || [];
-  const [filteredProjects, setFilteredProjects] = useState([
-    ...savedProjects,
-    ...ProjectData,
-  ]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredProjects, setFilteredProjects] = useState(savedProjects);
+
+  useEffect(() => {
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    if (user) {
+      const userProjects = ProjectData.filter(
+        (project) => project.userId === user._id
+      );
+      setFilteredProjects(userProjects);
+    }
+  }, []);
+
   const [active, setActive] = useState(false);
 
   function saveProject(
@@ -38,44 +44,13 @@ const Projects = () => {
     console.log(projectData);
   }
 
-  const searchEvent = (event) => {
-    const data = event.target.value;
-    setSearchTerm(data);
-    if (searchTerm !== "" || searchTerm.length > 2) {
-      const filterData = ProjectData.filter((project) => {
-        if (project) {
-          return Object.values(project)
-            .join("")
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase());
-        } else {
-          return 0;
-        }
-      });
-      setFilteredProjects(filterData);
-    } else {
-      setFilteredProjects(ProjectData);
-    }
-  };
-
-  function handleStatusFilter(selectedStatus) {
-    if (selectedStatus.length === 0 || selectedStatus.includes("All")) {
-      setFilteredProjects(ProjectData);
-      return;
-    }
-    const filtered = ProjectData.filter((project) =>
-      selectedStatus.includes(project.projectStatus)
-    );
-    setFilteredProjects(filtered);
-  }
-
   return (
     <>
       <Navbar />
       <div className="jobs-for-you">
         <div className="job-background">
           <div className="title">
-            <h2>Discover Projects</h2>
+            <h2>My Projects</h2>
           </div>
         </div>
         <div className="job-section">
@@ -113,17 +88,15 @@ const Projects = () => {
                             to="/Projects"
                             onClick={() => {
                               saveProject(
-                                {
-                                  id,
-                                  projectTitle,
-                                  projectDescription,
-                                  projectStatus,
-                                  uploadDate,
-                                  userId,
-                                  __v,
-                                },
-                                setActive(!active)
+                                id,
+                                projectTitle,
+                                projectDescription,
+                                projectStatus,
+                                uploadDate,
+                                userId,
+                                __v
                               );
+                              setActive(!active);
                             }}
                           >
                             {JSON.parse(localStorage.getItem("Job"))?.id ===
@@ -141,15 +114,10 @@ const Projects = () => {
               }
             )}
           </div>
-
-          <ProjectFilter
-            handleStatusFilter={handleStatusFilter}
-            searchEvent={searchEvent}
-          />
         </div>
       </div>
     </>
   );
 };
 
-export default Projects;
+export default MyProjects;

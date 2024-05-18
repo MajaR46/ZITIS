@@ -1,0 +1,92 @@
+[
+  {
+    "_id": "66008324dee43b5d31770d0b",
+    "projectTitle": "E-commerce Website Redesign",
+    "projectDescription": "Redesign the user interface and improve user experience for the e-commerce website.",
+    "projectStatus": "In Progress",
+    "uploadDate": "2024-04-01",
+    "userId": "user123444",
+    "__v": 0
+  },
+  {
+    "_id": "66008324dee43b5d31770d0c",
+    "projectTitle": "Mobile App Development",
+    "projectDescription": "Develop a new mobile application for iOS and Android platforms.",
+    "projectStatus": "Completed",
+    "uploadDate": "2024-04-02",
+    "userId": "user123444",
+    "__v": 0
+  },
+  {
+    "_id": "66008324dee43b5d31770d0d",
+    "projectTitle": "Data Analytics Dashboard",
+    "projectDescription": "Create a dashboard for visualizing and analyzing data from various sources.",
+    "projectStatus": "Pending",
+    "uploadDate": "2024-04-03",
+    "userId": "user123777",
+    "__v": 0
+  },
+  {
+    "_id": "66008324dee43b5d31770d0e",
+    "projectTitle": "Online Learning Platform",
+    "projectDescription": "Build an online platform for delivering educational courses and materials.",
+    "projectStatus": "In Progress",
+    "uploadDate": "2024-04-04",
+    "userId": "user123888",
+    "__v": 0
+  },
+  {
+    "_id": "66008324dee43b5d31770d0f",
+    "projectTitle": "Customer Relationship Management System",
+    "projectDescription": "Develop a CRM system to manage customer interactions and improve customer satisfaction.",
+    "projectStatus": "In Progress",
+    "uploadDate": "2024-04-05",
+    "userId": "user123999",
+    "__v": 0
+  },
+  {
+    "_id": "66008324dee43b5d31770d10",
+    "projectTitle": "Supply Chain Optimization",
+    "projectDescription": "Optimize the supply chain process to reduce costs and improve efficiency.",
+    "projectStatus": "Completed",
+    "uploadDate": "2024-04-06",
+    "userId": "user123000",
+    "__v": 0
+  },
+  {
+    "_id": "66008324dee43b5d31770d11",
+    "projectTitle": "Social Media Marketing Campaign",
+    "projectDescription": "Launch a social media marketing campaign to increase brand awareness and engagement.",
+    "projectStatus": "Pending",
+    "uploadDate": "2024-04-07",
+    "userId": "user123001",
+    "__v": 0
+  },
+  {
+    "_id": "66008324dee43b5d31770d12",
+    "projectTitle": "UI/UX Design Consultation",
+    "projectDescription": "Provide consultation services for improving the UI/UX design of existing applications.",
+    "projectStatus": "In Progress",
+    "uploadDate": "2024-04-08",
+    "userId": "user123002",
+    "__v": 0
+  },
+  {
+    "_id": "66008324dee43b5d31770d13",
+    "projectTitle": "Software Testing and Quality Assurance",
+    "projectDescription": "Perform testing and quality assurance activities for software products.",
+    "projectStatus": "Completed",
+    "uploadDate": "2024-04-09",
+    "userId": "user123003",
+    "__v": 0
+  },
+  {
+    "_id": "66008324dee43b5d31770d14",
+    "projectTitle": "Product Launch Strategy",
+    "projectDescription": "Develop a strategy for launching a new product into the market.",
+    "projectStatus": "Pending",
+    "uploadDate": "2024-04-10",
+    "userId": "user123004",
+    "__v": 0
+  }
+]

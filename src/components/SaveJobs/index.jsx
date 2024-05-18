@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Navbar from "../Navbar";
 
 const SaveJobs = () => {
-  const jobs = [JSON.parse(localStorage.getItem("Job"))];
+  const jobsJSON = localStorage.getItem("Job");
+  const jobs = jobsJSON ? [JSON.parse(jobsJSON)] : null;
+
   return (
     <div>
       <Navbar />
@@ -14,9 +16,11 @@ const SaveJobs = () => {
         </div>
         <div className="job-section">
           <div className="job-page">
-            {jobs.map(({ logo, company, position, location, role }) => {
-              return (
-                <div className="job-list">
+            {jobs === null ? (
+              <p>No saved jobs found.</p>
+            ) : (
+              jobs.map(({ logo, company, position, location, role }, index) => (
+                <div className="job-list" key={index}>
                   <div className="job-card">
                     <div className="job-name">
                       <img
@@ -33,12 +37,11 @@ const SaveJobs = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="job-posting">
-                    </div>
+                    <div className="job-posting"></div>
                   </div>
                 </div>
-              );
-            })}
+              ))
+            )}
           </div>
         </div>
       </div>

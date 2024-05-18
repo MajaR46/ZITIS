@@ -12,6 +12,8 @@ import AddProject from "./components/AddProjects";
 import Profile from "./components/Profile";
 import Register from "./components/Registration";
 import Login from "./components/Login";
+import SendInquiry from "./components/SendInquiry";
+import MyProjects from "./components/MyProjects";
 
 function App() {
   return (
@@ -26,12 +28,14 @@ function App() {
             <Route path="/apply-jobs" element={<ApplyJobs />} />
             <Route path="/saved-job" element={<SaveJobs />} />
             <Route path="/discussion" element={<Discussion />} />
-            <Route path="/my-projects" element={<Projects />} />
+            <Route path="/projects" element={<Projects />} />
             <Route path="/add-projects" element={<AddProject />} />
-            <Route path="/profile" element={<Profile/>}/>
-            <Route path="/registration" element={<Register/>}/>
-            <Route path="/login" element={<Login/>}/>
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/registration" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/my-projects" element={<MyProjects />} />
 
+            <Route path="/send-inquiry" element={<SendInquiry />} />
             <Route path="*" element={<ErrorPage />} />
           </Route>
         </Routes>
