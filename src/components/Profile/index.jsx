@@ -3,24 +3,18 @@ import Navbar from "../Navbar";
 import "./index.css";
 
 const Profile = () => {
-  // Retrieve user data from session storage
   const loggedInUser = JSON.parse(sessionStorage.getItem('user'));
 
-  // Function to handle logout
   const handleLogout = () => {
-    // Clear session storage
     sessionStorage.clear();
-    // Redirect to login page
     window.location.href = "/login";
   };
 
-  // If user is not found, redirect to login page
   if (!loggedInUser) {
     window.location.href = "/login";
     return null;
   }
 
-  // Render profile information for the logged-in user
   return (
     <>
       <Navbar />
