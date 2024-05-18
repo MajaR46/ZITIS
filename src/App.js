@@ -9,6 +9,9 @@ import ErrorPage from "./components/ErrorPage";
 import ApplyJobs from "./components/ApplyJobs";
 import Projects from "./components/Projects";
 import AddProject from "./components/AddProjects";
+import Profile from "./components/Profile";
+import Register from "./components/Registration";
+import Login from "./components/Login";
 
 function App() {
   return (
@@ -25,6 +28,10 @@ function App() {
             <Route path="/discussion" element={<Discussion />} />
             <Route path="/my-projects" element={<Projects />} />
             <Route path="/add-projects" element={<AddProject />} />
+            <Route path="/profile" element={<Profile/>}/>
+            <Route path="/registration" element={<Register/>}/>
+            <Route path="/login" element={<Login/>}/>
+
             <Route path="*" element={<ErrorPage />} />
           </Route>
         </Routes>

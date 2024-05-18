@@ -7,7 +7,7 @@
     "role": "Fullstack",
     "level": "Full Stack",
     "experience": 1,
-    "salary":10000,
+    "salary": 10000,
     "location": "Remote",
     "posted": "2022-10-15"
   },
@@ -227,18 +227,16 @@
     "location": "Gurugram",
     "posted": "2021-11-15"
   },
-    {
-      "id": 20,
-      "company": "Facebook",
-      "logo": "facebook.png",
-      "position": "Full Stack Engineer",
-      "role": "Full Stack",
-      "level": "Negative",
-      "experience": 1,
-      "salary": 56000,
-      "location": "Mumbai",
-      "posted": "2021-12-15"
-    }
+  {
+    "id": 20,
+    "company": "Facebook",
+    "logo": "facebook.png",
+    "position": "Full Stack Engineer",
+    "role": "Full Stack",
+    "level": "Negative",
+    "experience": 1,
+    "salary": 56000,
+    "location": "Mumbai",
+    "posted": "2021-12-15"
+  }
 ]
-
-

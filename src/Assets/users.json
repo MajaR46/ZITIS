@@ -1,0 +1,132 @@
+[
+    {
+        "email": "johndoe@example.com",
+        "password": "johndoe",
+        "firstName": "John",
+        "lastName": "Doe",
+        "skills": [
+            "JavaScript",
+            "React",
+            "Node.js"
+        ],
+        "location": "New York",
+        "bio": "Passionate about web development and creating awesome user experiences."
+    },
+    {
+        "email": "alicesmith@example.com",
+        "password": "alicesmith",
+        "firstName": "Alice",
+        "lastName": "Smith",
+        "skills": [
+            "Python",
+            "Django",
+            "SQL"
+        ],
+        "location": "San Francisco",
+        "bio": "Experienced full-stack developer with a focus on backend development."
+    },
+    {
+        "email": "emmajohnson@example.com",
+        "password": "emmajohnson",
+        "firstName": "Emma",
+        "lastName": "Johnson",
+        "skills": [
+            "Java",
+            "Spring",
+            "Hibernate"
+        ],
+        "location": "Chicago",
+        "bio": "Java enthusiast with expertise in building scalable enterprise applications."
+    },
+    {
+        "email": "michaelbrown@example.com",
+        "password": "michaelbrown",
+        "firstName": "Michael",
+        "lastName": "Brown",
+        "skills": [
+            "Ruby",
+            "Rails",
+            "PostgreSQL"
+        ],
+        "location": "Los Angeles",
+        "bio": "Passionate about Ruby on Rails development and open-source projects."
+    },
+    {
+        "email": "sophiawilliams@example.com",
+        "password": "sophiawilliams",
+        "firstName": "Sophia",
+        "lastName": "Williams",
+        "skills": [
+            "C#",
+            ".NET",
+            "SQL Server"
+        ],
+        "location": "Seattle",
+        "bio": "Experienced .NET developer with a focus on building scalable applications."
+    },
+    {
+        "email": "matthewjones@example.com",
+        "password": "matthewjones",
+        "firstName": "Matthew",
+        "lastName": "Jones",
+        "skills": [
+            "PHP",
+            "Laravel",
+            "MySQL"
+        ],
+        "location": "Houston",
+        "bio": "Passionate about PHP development and building robust web applications."
+    },
+    {
+        "email": "oliviabrown@example.com",
+        "password": "oliviabrown",
+        "firstName": "Olivia",
+        "lastName": "Brown",
+        "skills": [
+            "HTML",
+            "CSS",
+            "Sass"
+        ],
+        "location": "Austin",
+        "bio": "Frontend developer with expertise in modern web technologies."
+    },
+    {
+        "email": "jamesgarcia@example.com",
+        "password": "jamesgarcia",
+        "firstName": "James",
+        "lastName": "Garcia",
+        "skills": [
+            "Angular",
+            "TypeScript",
+            "Firebase"
+        ],
+        "location": "Miami",
+        "bio": "Passionate about building interactive web applications with Angular."
+    },
+    {
+        "email": "emilymartinez@example.com",
+        "password": "emilymartinez",
+        "firstName": "Emily",
+        "lastName": "Martinez",
+        "skills": [
+            "Vue.js",
+            "Vuex",
+            "RESTful APIs"
+        ],
+        "location": "Dallas",
+        "bio": "Vue.js enthusiast with a focus on state management and API integration."
+    },
+    {
+        "email": "liamlopez@example.com",
+        "password": "liamlopez",
+        "firstName": "Liam",
+        "lastName": "Lopez",
+        "skills": [
+            "Swift",
+            "iOS Development",
+            "Core Data"
+        ],
+        "location": "Boston",
+        "bio": "iOS developer with a passion for creating intuitive and elegant mobile apps."
+    }
+]
