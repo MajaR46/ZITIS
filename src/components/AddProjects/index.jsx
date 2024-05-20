@@ -3,6 +3,8 @@ import Navbar from "../Navbar";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 
+// TODO: Delete the userId input field, get the user id of the logged-in user from authentication token or session data, make the necessary changes in the database to automatically assign the user id to the project, and include authentication token or session data
+
 const AddProject = () => {
   const navigate = useNavigate();
   const [projectTitle, setProjectTitle] = useState("");
@@ -11,8 +13,14 @@ const AddProject = () => {
   const [uploadDate, setUploadDate] = useState("");
   const [userId, setUserId] = useState("");
 
-  const handleSubmitButton = (e) => {
+  const handleSubmitButton = async (e) => {
     e.preventDefault();
+
+    if (projectTitle === "" || projectDescription === "" || projectStatus === "" || uploadDate === "" || userId === "") {
+      alert("All fields are required");
+      return;
+    }
+
     const projectData = {
       projectTitle,
       projectDescription,
@@ -20,29 +28,41 @@ const AddProject = () => {
       uploadDate,
       userId,
     };
-    if (projectTitle === "") {
-      alert("Enter project title");
-    } else if (projectDescription === "") {
-      alert("Enter project description");
-    } else if (projectStatus === "") {
-      alert("Select project status");
-    } else if (uploadDate === "") {
-      alert("Enter upload date");
-    } else if (userId === "") {
-      alert("Enter user ID");
-    } else {
-      let savedProjects = [];
-      if (localStorage.getItem("projects")) {
-        savedProjects = JSON.parse(localStorage.getItem("projects"));
+
+    try {
+      const response = await fetch("http://localhost:3001/api/project", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(projectData),
+      });
+
+      if (response.ok) {
+        const newProject = await response.json();
+
+        // Save project data to localStorage
+        let savedProjects = [];
+        if (localStorage.getItem("projects")) {
+          savedProjects = JSON.parse(localStorage.getItem("projects"));
+        }
+        localStorage.setItem(
+          "projects",
+          JSON.stringify([...savedProjects, newProject])
+        );
+
+        alert("Project Added Successfully");
+        navigate("/projects");
+      } else {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.message}`);
       }
-      localStorage.setItem(
-        "projects",
-        JSON.stringify([...savedProjects, projectData])
-      );
-      alert("Project Added Successfully");
-      navigate("/projects");
+    } catch (error) {
+      console.error("Error adding project:", error);
+      alert("An error occurred while adding the project");
     }
   };
+
 
   return (
     <div>
