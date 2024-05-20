@@ -2,6 +2,8 @@ import React from "react";
 import Navbar from "../Navbar";
 import "./index.css";
 
+// TODO: For frontend team, add a button to edit the profile, and a button to delete the profile. For backend team, connect with neccessary routes to update and delete the profile. Include authentication token or session data for the user to be able to edit or delete their profile
+
 const Profile = () => {
   const loggedInUser = JSON.parse(sessionStorage.getItem("user"));
 

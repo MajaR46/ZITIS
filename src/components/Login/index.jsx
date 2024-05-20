@@ -3,6 +3,8 @@ import './index.css';
 import users from "./../../Assets/users.json";
 import { useNavigate } from 'react-router-dom';
 
+//TODO: Add authentication token, Secure Token Handling
+
 const Login = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -15,18 +17,37 @@ const Login = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const { email, password } = formData;
-        const user = users.find(user => user.email === email && user.password === password);
-        if (user) {
-            sessionStorage.setItem('user', JSON.stringify(user));
-            alert("Login successful!");
-            navigate("/Profile");
-        } else {
-            alert("Invalid email or password.");
+        if (!email || !password) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:3001/api/user/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                sessionStorage.setItem('user', JSON.stringify(data.user));
+                alert("Login successful!");
+                navigate("/Profile");
+            } else {
+                const data = await response.json();
+                alert(`Login failed: ${data.message}`);
+            }
+        } catch (error) {
+            alert(`Login failed: ${error.message}`);
         }
     };
+
 
     const handleRegister = () => {
         navigate("/registration");

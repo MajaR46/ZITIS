@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./index.css";
-const experience = [
+
+const experienceLevels = [
   { min: 0, max: 1 },
   { min: 2, max: 3 },
   { min: 4, max: 5 },
@@ -8,13 +9,13 @@ const experience = [
 ];
 
 const Filter = ({
-  setFilteredJobs,
+  roles = [],
   handleJobFilter,
   handleExperienceFilter,
   searchEvent,
 }) => {
   const [checkedState, setCheckedState] = useState(
-    new Array(experience.length).fill(false)
+    new Array(experienceLevels.length).fill(false)
   );
 
   const handleOnChange = (position) => {
@@ -25,6 +26,7 @@ const Filter = ({
     setCheckedState(updatedCheckedState);
     handleExperienceFilter(updatedCheckedState);
   };
+
   return (
     <>
       <div className="filter-page">
@@ -44,11 +46,13 @@ const Filter = ({
             <div className="job-category">
               <h4>Categories</h4>
               <ul>
-                <li onClick={handleJobFilter}>Frontend</li>
-                <li onClick={handleJobFilter}>Backend</li>
-                <li onClick={handleJobFilter}>Devops</li>
-                <li onClick={handleJobFilter}>Full Stack</li>
-                <li onClick={handleJobFilter}>Digital Marketing</li>
+                {roles.length > 0 ? (
+                  roles.map((role, index) => (
+                    <li key={index} onClick={() => handleJobFilter(role)}>{role}</li>
+                  ))
+                ) : (
+                  <li>Loading...</li>
+                )}
               </ul>
             </div>
 
@@ -84,7 +88,7 @@ const Filter = ({
                 </li>
                 <li>
                   <input
-                    name="4-5"
+                    name="5+"
                     type="checkbox"
                     checked={checkedState[3]}
                     onChange={() => handleOnChange(3)}

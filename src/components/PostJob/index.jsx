@@ -3,17 +3,22 @@ import { useState } from "react";
 import Navbar from "../Navbar";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+//TODO: Delete the userId input field, get the user id of the logged-in user from authentication token or session data
 
 const PostJob = () => {
   const [company, setCompany] = useState("");
-  const [logo, setLogo] = useState("");
   const [position, setPosition] = useState("");
+  const [role, setRole] = useState("");
+  const [level, setLevel] = useState("");
   const [salary, setSalary] = useState("");
   const [experience, setExperience] = useState("");
-  const [role, setRole] = useState("");
   const [location, setLocation] = useState("");
+  const [userId, setUserId] = useState("");
 
-const navigate=useNavigate();
+  const navigate = useNavigate();
+
   const getBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -22,42 +27,61 @@ const navigate=useNavigate();
       reader.readAsDataURL(file);
     });
   };
-  const handleImg = (e) => {
-    const file = e.target.files[0];
-    getBase64(file).then((base64) => {
-      localStorage["logo"] = base64;
-      setLogo(base64);
-    });
-  };
 
-  const handleSubmitButton = (e) => {
-      const jobPost = {
-        company,
-        position,
-        salary,
-        experience,
-        role,
-        location,
-        logo
-      };
+  const handleSubmitButton = async (e) => {
     e.preventDefault();
-    if (company === "") {
-      window.alert("Enter name");
-    } else if (position === "") {
-      window.alert("Enter position");
-    } else if (experience === "") {
-      window.alert("Enter Experience");
-    } else if (salary === "") window.alert("Enter Salary");
-    else {
-      let savedItem = [];
-      if (localStorage.getItem("item")) {
-        savedItem = JSON.parse(localStorage.getItem("item"));
+
+    if (company === "" || position === "" || experience === "" || salary === "" || role === "" || location === "" || userId === "" || level === "") {
+      window.alert("Please fill all the required fields.");
+      return;
+    }
+
+    const jobPost = {
+      company,
+      position,
+      role,
+      level,
+      salary,
+      experience: parseInt(experience, 10),
+      location,
+      userId
+    };
+
+
+    try {
+      const response = await fetch("http://localhost:3001/api/job", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(jobPost),
+      });
+
+      if (response.ok) {
+        const newJob = await response.json();
+
+        // Save project data to localStorage
+        let savedJobs = [];
+        if (localStorage.getItem("jobs")) {
+          savedJobs = JSON.parse(localStorage.getItem("jobs"));
+        }
+        localStorage.setItem(
+          "jobs",
+          JSON.stringify([...savedJobs, newJob])
+        );
+
+        alert("Project Added Successfully");
+        navigate("/jobs");
+      } else {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.message}`);
       }
-      localStorage.setItem("item", JSON.stringify([...savedItem, {jobPost}]));
-      window.alert("Form Submitted Successfully");
-      navigate("/Jobs");
+    } catch (error) {
+      console.error("Error adding job:", error);
+      alert("An error occurred while adding the job");
     }
   };
+
   return (
     <div>
       <Navbar />
@@ -71,7 +95,7 @@ const navigate=useNavigate();
         <header className="header">
           <h1 className="post-job">Fill the form </h1>
         </header>
-        <form>
+        <form onSubmit={handleSubmitButton}>
           <div className="form-group">
             <label id="name-label" htmlFor="name">
               Company Name
@@ -97,20 +121,6 @@ const navigate=useNavigate();
               onChange={(e) => setLocation(e.target.value)}
               required
             />
-          </div>
-          <div className="form-group">
-            <label id="logo-label" htmlFor="logo">
-              Company logo
-            </label>
-            <label>
-              <input
-                type="file"
-                id="myFile"
-                name="filename"
-                onChange={handleImg}
-                required
-              />
-            </label>
           </div>
           <div className="form-group">
             <label>What position are you posting for?</label>
@@ -144,11 +154,21 @@ const navigate=useNavigate();
               required
             />
           </div>
+          <div className="form-group">
+            <label id="name-label" htmlFor="name">
+              Enter Level
+            </label>
+            <input
+              type="text"
+              name="name"
+              className="form-control"
+              placeholder="Enter Level"
+              onChange={(e) => setLevel(e.target.value)}
+              required
+            />
+          </div>
 
-          <div
-            className="form-group"
-            onChange={(e) => setExperience(e.target.value)}
-          >
+          <div className="form-group" onChange={(e) => setExperience(e.target.value)}>
             <label>Experience </label>
             <label>
               <input
@@ -162,7 +182,7 @@ const navigate=useNavigate();
             <label>
               <input
                 name="user-recommend"
-                value=" 2-3 Years"
+                value="2-3 Years"
                 type="radio"
                 className="input-radio"
               />
@@ -171,7 +191,7 @@ const navigate=useNavigate();
             <label>
               <input
                 name="user-recommend"
-                value=" 4-5 Years"
+                value="4-5 Years"
                 type="radio"
                 className="input-radio"
               />
@@ -206,7 +226,21 @@ const navigate=useNavigate();
             </select>
           </div>
           <div className="form-group">
-            <button type="submit" className="submit-button" onClick={handleSubmitButton}>
+            <label id="name-label" htmlFor="userId">
+              User ID
+            </label>
+            <input
+              type="text"
+              id="userId"
+              className="form-control"
+              value={userId}
+              placeholder="Enter User ID"
+              onChange={(e) => setUserId(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <button type="submit" className="submit-button">
               Submit
             </button>
           </div>
