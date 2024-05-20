@@ -2,18 +2,21 @@ import React, { useState } from 'react';
 import './index.css';
 import { useNavigate } from 'react-router-dom';
 
+
+//TODO: Implement backend logic for job application- if it is needed -da se dogovorimo:))
+
 const ApplyJobs = () => {
-  const navigate=useNavigate();
-  const [name,setName]=useState("")
-  const OnformSubmit=()=>{
-    if(name==="" ){
+  const navigate = useNavigate();
+  const [name, setName] = useState("")
+  const OnformSubmit = () => {
+    if (name === "") {
       alert("Please fill the name first")
     }
-else{
-    alert("Your Job Application has been Applied Successfully")
-    navigate("/Jobs")
+    else {
+      alert("Your Job Application has been Applied Successfully")
+      navigate("/Jobs")
 
-}
+    }
   }
   return (
     <div className="apply-job">

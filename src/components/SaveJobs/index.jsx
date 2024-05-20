@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "../Navbar";
+//TODO: Implement backend logic for saving jobs
 
 const SaveJobs = () => {
   const jobsJSON = localStorage.getItem("Job");

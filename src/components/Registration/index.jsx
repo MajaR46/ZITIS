@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 
+// TODO: Add authentication token, Secure Token Handling
+
 const Register = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -22,18 +24,37 @@ const Register = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password, role, ...rest } = formData;
     if (!email || !password || !role) {
       alert("Please fill in all fields.");
-    } else {
-      alert("Your registration has been submitted successfully.");
-      navigate("/Home");
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:3001/api/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        alert("Your registration has been submitted successfully.");
+        navigate("/Home");
+      } else {
+        const data = await response.json();
+        alert(`Registration failed: ${data.message}`);
+      }
+    } catch (error) {
+      alert(`Registration failed: ${error.message}`);
     }
   };
 
-  // Function to render additional fields based on role
+
+
   const renderAdditionalFields = () => {
     if (formData.role === "company") {
       return (
