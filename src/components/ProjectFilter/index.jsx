@@ -11,6 +11,7 @@ const ProjectFilter = ({ handleStatusFilter, searchEvent }) => {
   const [checkedState, setCheckedState] = useState(
     new Array(projectStatus.length).fill(false)
   );
+
   const handleOnChange = (position) => {
     const updatedCheckedState = checkedState.map((item, index) =>
       index === position ? !item : item

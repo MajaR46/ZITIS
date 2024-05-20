@@ -5,6 +5,8 @@ import "./index.css";
 import ProjectData from "./../../Assets/projects.json";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 
+//TODO: Implement backend logic to get the projects of the logged-in user
+
 const MyProjects = () => {
   const savedProjects = JSON.parse(localStorage.getItem("projects")) || [];
   const [filteredProjects, setFilteredProjects] = useState(savedProjects);
@@ -100,7 +102,7 @@ const MyProjects = () => {
                             }}
                           >
                             {JSON.parse(localStorage.getItem("Job"))?.id ===
-                            id ? (
+                              id ? (
                               <AiFillHeart />
                             ) : (
                               <AiOutlineHeart />

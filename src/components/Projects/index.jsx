@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar";
 import { Link } from "react-router-dom";
 import "./index.css";
-import ProjectData from "./../../Assets/projects.json";
 import { AiOutlineHeart, AiFillHeart, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import ProjectFilter from "../ProjectFilter";
+
+//TODO: fix the part with the comments/reviws
 
 const ProjectCard = ({
   id,
@@ -13,7 +14,6 @@ const ProjectCard = ({
   projectStatus,
   uploadDate,
   userId,
-  __v,
 }) => {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
@@ -21,42 +21,112 @@ const ProjectCard = ({
   const [editCommentId, setEditCommentId] = useState(null);
   const loggedInUser = JSON.parse(sessionStorage.getItem("user"));
 
-  const addComment = () => {
-    const commenterName = loggedInUser ? `${loggedInUser.firstName} ${loggedInUser.lastName}` : "Anonymous";
-    const newComment = {
-      id: Date.now(),
-      user: commenterName,
-      text: comment,
-    };
-    setComments([...comments, newComment]);
-    setComment("");
+  useEffect(() => {
+    if (id) {
+      fetchComments();
+    }
+  }, [id]);
+
+  const fetchComments = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/review/project/${id}`);
+      const data = await response.json();
+      setComments(data);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      setComments([]);  // Initialize as an empty array in case of error
+    }
   };
 
-  const deleteComment = (commentId) => {
-    const updatedComments = comments.filter(comment => comment.id !== commentId);
-    setComments(updatedComments);
+  const addComment = async () => {
+    if (!loggedInUser) {
+      console.error("User not logged in");
+      alert("You must be logged in to add a comment.");
+      return;
+    }
+
+    const commenterName = `${loggedInUser.firstName} ${loggedInUser.lastName}`;
+    const newComment = {
+      comment,
+      userId: loggedInUser.id,
+      projectId: id,
+    };
+
+    try {
+      const response = await fetch("http://localhost:3001/api/review", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newComment),
+      });
+
+      if (response.ok) {
+        const createdComment = await response.json();
+        setComments([...comments, createdComment]);
+        setComment("");
+      } else {
+        const errorData = await response.json();
+        console.error("Error adding comment:", errorData);
+        alert("Failed to add comment. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error adding comment:", error);
+      alert("Failed to add comment. Please try again.");
+    }
   };
+
+  const deleteComment = async (commentId) => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/review/${commentId}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        setComments(comments.filter(comment => comment._id !== commentId));
+      } else {
+        const errorData = await response.json();
+        console.error("Error deleting comment:", errorData);
+        alert("Failed to delete comment. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      alert("Failed to delete comment. Please try again.");
+    }
+  };
+
 
   const editComment = (commentId) => {
-    const commentToEdit = comments.find(comment => comment.id === commentId);
+    const commentToEdit = comments.find(comment => comment._id === commentId);
     if (commentToEdit) {
-      setComment(commentToEdit.text);
+      setComment(commentToEdit.comment);
       setEditCommentId(commentId);
       setShowCommentBox(true);
     }
   };
 
-  const updateComment = () => {
-    const updatedComments = comments.map(comment => {
-      if (comment.id === editCommentId) {
-        return { ...comment, text: comment };
+  const updateComment = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/review/${editCommentId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ comment }),
+      });
+      if (response.ok) {
+        setComments(comments.map(comment => (comment._id === editCommentId ? { ...comment, comment } : comment)));
+        setComment("");
+        setEditCommentId(null);
+        setShowCommentBox(false);
+      } else {
+        const errorData = await response.json();
+        console.error("Error updating comment:", errorData);
+        alert("Failed to update comment. Please try again.");
       }
-      return comment;
-    });
-    setComments(updatedComments);
-    setComment("");
-    setEditCommentId(null);
-    setShowCommentBox(false);
+    } catch (error) {
+      console.error("Error updating comment:", error);
+      alert("Failed to update comment. Please try again.");
+    }
   };
 
   return (
@@ -89,31 +159,31 @@ const ProjectCard = ({
         </div>
       </div>
       <div className="comment-section">
-        {/* Show the textarea only if showCommentBox is true */}
         {showCommentBox && (
           <>
-            <textarea className="commentBox"
+            <textarea
+              className="commentBox"
               placeholder="Add a comment..."
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             />
-            <button onClick={addComment}>Add Comment</button>
+            <button onClick={editCommentId ? updateComment : addComment}>
+              {editCommentId ? "Update Comment" : "Add Comment"}
+            </button>
           </>
         )}
-        {/* Button to toggle the display of the textarea */}
         <button className="addComment" onClick={() => setShowCommentBox(!showCommentBox)}>
           {showCommentBox ? "Hide Comment" : "Add a Comment"}
         </button>
-        {/* Display comments */}
         <div className="comments">
-          {comments.map((comment, index) => (
+          {Array.isArray(comments) && comments.map((comment, index) => (
             <div key={index} className="comment">
               <p>
-                <strong>{comment.user}</strong>: {comment.text}
+                <strong>{comment.userId}</strong>: {comment.comment}
               </p>
               <div className="comment-actions">
-                <button onClick={() => editComment(comment.id)}><AiOutlineEdit /></button>
-                <button onClick={() => deleteComment(comment.id)}><AiOutlineDelete /></button>
+                <button onClick={() => editComment(comment._id)}><AiOutlineEdit /></button>
+                <button onClick={() => deleteComment(comment._id)}><AiOutlineDelete /></button>
               </div>
             </div>
           ))}
@@ -124,44 +194,69 @@ const ProjectCard = ({
 };
 
 const Projects = () => {
-  const savedProjects = JSON.parse(localStorage.getItem("projects")) || [];
-  const [filteredProjects, setFilteredProjects] = useState([
-    ...savedProjects,
-    ...ProjectData,
-  ]);
+  const [projects, setProjects] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [active, setActive] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState([]);
 
-  const searchEvent = (event) => {
-    const data = event.target.value;
-    setSearchTerm(data);
-    if (searchTerm !== "" || searchTerm.length > 2) {
-      const filterData = ProjectData.filter((project) => {
-        if (project) {
-          return Object.values(project)
-            .join("")
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase());
-        } else {
-          return 0;
-        }
-      });
-      setFilteredProjects(filterData);
-    } else {
-      setFilteredProjects(ProjectData);
+  useEffect(() => {
+    fetchProjects();
+  }, [selectedStatus]);
+
+  const fetchProjects = async () => {
+    let url = "http://localhost:3001/api/project";
+
+    if (selectedStatus.length && !selectedStatus.includes("All")) {
+      url = `http://localhost:3001/api/project/status/${selectedStatus.join(",")}`;
+    }
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      setProjects(data);
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+      setProjects([]);
     }
   };
 
-  function handleStatusFilter(selectedStatus) {
-    if (selectedStatus.length === 0 || selectedStatus.includes("All")) {
-      setFilteredProjects(ProjectData);
+  const fetchProjectsByTitle = async () => {
+    if (searchTerm.length < 3) {
+      fetchProjects();
       return;
     }
-    const filtered = ProjectData.filter((project) =>
-      selectedStatus.includes(project.projectStatus)
-    );
-    setFilteredProjects(filtered);
-  }
+
+    try {
+      const url = `http://localhost:3001/api/project/title/${searchTerm}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (response.status === 404) {
+        console.log("No projects found with the given title.");
+        setProjects([]); // Set to empty array if no projects are found
+      } else {
+        setProjects(data);
+      }
+    } catch (error) {
+      console.error("Error fetching projects by title:", error);
+      setProjects([]); // Set to empty array in case of error
+    }
+  };
+
+  const handleStatusFilter = (status) => {
+    setSelectedStatus(status);
+  };
+
+  const searchEvent = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  useEffect(() => {
+    if (searchTerm) {
+      fetchProjectsByTitle();
+    } else {
+      fetchProjects();
+    }
+  }, [searchTerm]);
 
   return (
     <>
@@ -174,8 +269,8 @@ const Projects = () => {
         </div>
         <div className="job-section">
           <div className="job-page">
-            {filteredProjects.map((project) => (
-              <ProjectCard key={project.id} {...project} />
+            {Array.isArray(projects) && projects.map((project) => (
+              <ProjectCard key={project._id} {...project} />
             ))}
           </div>
           <ProjectFilter
