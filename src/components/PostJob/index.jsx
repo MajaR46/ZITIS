@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import Navbar from "../Navbar";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
@@ -26,18 +25,17 @@ const PostJob = () => {
     });
   };
 
-  useEffect(() => {
+  const handleSubmitButton = async (e) => {
+    e.preventDefault();
+
     const token = sessionStorage.getItem("token");
+
     if (!token) {
       window.alert("User not authenticated");
       return;
     }
     const userIdFromToken = JSON.parse(atob(token.split(".")[1])).sub;
     setUserId(userIdFromToken);
-  }, []);
-
-  const handleSubmitButton = async (e) => {
-    e.preventDefault();
 
     if (company === "" || position === "" || experience === "" || salary === "" || role === "" || location === "" || userId === "" || level === "") {
       window.alert("Please fill all the required fields.");

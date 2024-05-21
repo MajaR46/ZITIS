@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../Navbar";
 import "./index.css";
-import { useNavigate, useEffect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // TODO: Delete the userId input field, get the user id of the logged-in user from authentication token or session data, make the necessary changes in the database to automatically assign the user id to the project, and include authentication token or session data
 
@@ -13,18 +13,18 @@ const AddProject = () => {
   const [uploadDate, setUploadDate] = useState("");
   const [userId, setUserId] = useState("");
 
-  useEffect(() => {
+
+  const handleSubmitButton = async (e) => {
+    e.preventDefault();
+
     const token = sessionStorage.getItem("token");
+
     if (!token) {
       window.alert("User not authenticated");
       return;
     }
     const userIdFromToken = JSON.parse(atob(token.split(".")[1])).sub;
     setUserId(userIdFromToken);
-  }, []);
-
-  const handleSubmitButton = async (e) => {
-    e.preventDefault();
 
     if (projectTitle === "" || projectDescription === "" || projectStatus === "" || uploadDate === "" || userId === "") {
       alert("All fields are required");
@@ -44,6 +44,7 @@ const AddProject = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify(projectData),
       });
