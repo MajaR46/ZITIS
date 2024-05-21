@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../Navbar";
 import "./index.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useEffect } from "react-router-dom";
 
 // TODO: Delete the userId input field, get the user id of the logged-in user from authentication token or session data, make the necessary changes in the database to automatically assign the user id to the project, and include authentication token or session data
 
@@ -12,6 +12,16 @@ const AddProject = () => {
   const [projectStatus, setProjectStatus] = useState("");
   const [uploadDate, setUploadDate] = useState("");
   const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      window.alert("User not authenticated");
+      return;
+    }
+    const userIdFromToken = JSON.parse(atob(token.split(".")[1])).sub;
+    setUserId(userIdFromToken);
+  }, []);
 
   const handleSubmitButton = async (e) => {
     e.preventDefault();
@@ -132,20 +142,6 @@ const AddProject = () => {
               className="form-control"
               value={uploadDate}
               onChange={(e) => setUploadDate(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label id="name-label" htmlFor="userId">
-              User ID
-            </label>
-            <input
-              type="text"
-              id="userId"
-              className="form-control"
-              value={userId}
-              placeholder="Enter User ID"
-              onChange={(e) => setUserId(e.target.value)}
               required
             />
           </div>

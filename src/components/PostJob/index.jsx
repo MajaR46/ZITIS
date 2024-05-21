@@ -5,8 +5,6 @@ import "./index.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-//TODO: Delete the userId input field, get the user id of the logged-in user from authentication token or session data
-
 const PostJob = () => {
   const [company, setCompany] = useState("");
   const [position, setPosition] = useState("");
@@ -27,6 +25,16 @@ const PostJob = () => {
       reader.readAsDataURL(file);
     });
   };
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      window.alert("User not authenticated");
+      return;
+    }
+    const userIdFromToken = JSON.parse(atob(token.split(".")[1])).sub;
+    setUserId(userIdFromToken);
+  }, []);
 
   const handleSubmitButton = async (e) => {
     e.preventDefault();
@@ -53,6 +61,7 @@ const PostJob = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify(jobPost),
       });
@@ -224,20 +233,6 @@ const PostJob = () => {
               <option value="50K-80K">50K-80K</option>
               <option value="80K+">80K+</option>
             </select>
-          </div>
-          <div className="form-group">
-            <label id="name-label" htmlFor="userId">
-              User ID
-            </label>
-            <input
-              type="text"
-              id="userId"
-              className="form-control"
-              value={userId}
-              placeholder="Enter User ID"
-              onChange={(e) => setUserId(e.target.value)}
-              required
-            />
           </div>
           <div className="form-group">
             <button type="submit" className="submit-button">

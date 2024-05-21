@@ -121,7 +121,7 @@ exports.login = async (req, res) => {
 
         const token = jwt.sign(
             {
-              sub: user.email.toString(),
+              sub: user.id.toString(),
               name: `${user.firstName} ${user.lastName}`,
               iat: Math.floor(Date.now() / 1000),
               exp: Math.floor(Date.now() / 1000) + 3600, // 1 hour expiration
@@ -137,14 +137,15 @@ exports.login = async (req, res) => {
 
 exports.saveJob = async (req, res) => {
     try {
-        const userEmail = req.user.sub;
+        console.log(req.user.sub)
+        const userId = req.user.sub;
         const jobId = req.body.jobId;
 
-        if (!userEmail || !jobId) {
-            return res.status(400).json({ message: 'User email and Job ID are required' });
+        if (!userId || !jobId) {
+            return res.status(400).json({ message: 'User ID and Job ID are required' });
         }
 
-        const user = await User.findOne({ email: userEmail });
+        const user = await User.findOne({ _id: userId });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
