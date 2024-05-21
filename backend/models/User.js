@@ -42,6 +42,10 @@ const userSchema = mongoose.Schema({
     type: String,
     required: false,
   },
+  savedJobs: {
+    type: [String],
+    required: false
+  }
 });
 
 const User = mongoose.model("User", userSchema);

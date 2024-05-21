@@ -135,3 +135,31 @@ exports.login = async (req, res) => {
     }
 };
 
+exports.saveJob = async (req, res) => {
+    try {
+        const userEmail = req.user.sub;
+        const jobId = req.body.jobId;
+
+        if (!userEmail || !jobId) {
+            return res.status(400).json({ message: 'User email and Job ID are required' });
+        }
+
+        const user = await User.findOne({ email: userEmail });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (user.savedJobs.includes(jobId)) {
+            return res.status(400).json({ message: 'Job already saved' });
+        }
+
+        user.savedJobs.push(jobId);
+        await user.save();
+
+        res.json({ message: 'Job saved successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+

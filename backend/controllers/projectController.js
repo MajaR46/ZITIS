@@ -1,6 +1,5 @@
 const Project = require('../models/project');
 
-
 exports.getAllProjects = async (req, res) => {
     try {
         const projects = await Project.find();
@@ -84,3 +83,14 @@ exports.deleteProject = async (req, res) => {
     }
 };
 
+exports.getUsersProjects = async (req, res) => {
+    try {
+        console.log(req.params);
+        const userId = req.params.id;
+        console.log(userId);
+        const projects = await Project.find({ userId: userId });
+        res.json(projects);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

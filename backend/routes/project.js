@@ -10,5 +10,6 @@ router.get('/:id', projectController.getProjectById);
 router.post('/', authMiddleware, projectController.createProject);
 router.put('/:id', authMiddleware, projectController.updateProject);
 router.delete('/:id', authMiddleware, projectController.deleteProject);
+router.get('/user/:id', authMiddleware, projectController.getUsersProjects);
 
 module.exports = router;
