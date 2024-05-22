@@ -4,14 +4,9 @@ import React, { useState, useEffect } from "react";
 
 const SessionManager = ({ children }) => {
   const [showNotification, setShowNotification] = useState(false);
-  const token = sessionStorage.getItem("token");
-  const refreshToken = sessionStorage.getItem("refreshToken");
 
-  console.log("refreshtoken:" + refreshToken)
-
-  const dataToSend = {
-    refreshToken: refreshToken
-  };
+  const [token] = useState(sessionStorage.getItem("token"));
+  const [refreshToken] = useState(sessionStorage.getItem("refreshToken"));
 
   useEffect(() => {
     const tokenExpirationTime = sessionStorage.getItem('expiresAt');
@@ -43,10 +38,10 @@ const SessionManager = ({ children }) => {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
           },
-          body: JSON.stringify(dataToSend),
+          body: JSON.stringify({
+            refreshToken: refreshToken
+          }),
         });
-
-        console.log(JSON.stringify(dataToSend))
 
         if (response.ok) {
           const data = await response.json();
