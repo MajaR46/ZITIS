@@ -22,13 +22,7 @@ const Navbar = () => {
           <li>
             <Link to="/jobs">Jobs</Link>
           </li>
-          {userRole === "company" && (
-            <>
-              <li>
-                <Link to="/post-job">Post Job</Link>
-              </li>
-            </>
-          )}
+
           <li>
             <Link to="/saved-job">Saved Job</Link>
           </li>
@@ -58,6 +52,12 @@ const Navbar = () => {
                     <>
                       <Link to="/my-projects">My Projects</Link>
                       <Link to="/add-projects">Post a Project</Link>
+                    </>
+                  )}
+                  {userRole == "company" && (
+                    <>
+                      <Link to="/my-jobs">My Jobs</Link>
+                      <Link to="/post-job">Post a Job</Link>
                     </>
                   )}
                 </div>
