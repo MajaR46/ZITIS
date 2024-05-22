@@ -141,7 +141,7 @@ exports.login = async (req, res) => {
             maxAge: 24 * 60 * 60 * 1000
         });
 
-        const expiresAt = Math.floor(Date.now() / 1000) + 60;
+        const expiresAt = Math.floor(Date.now() / 1000) + 3600;
         res.json({ message: 'Login successful', user: userObject, token: token, expiresAt: expiresAt, refreshToken: refreshToken});
     } catch (error) {
         res.status(500).json({ message: error.message });
