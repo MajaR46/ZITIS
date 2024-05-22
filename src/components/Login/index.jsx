@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import './index.css';
 import users from "./../../Assets/users.json";
-import { useNavigate } from 'react-router-dom';
-
-//TODO: Add authentication token, Secure Token Handling
+import { useNavigate, useEffect } from 'react-router-dom';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -31,12 +29,16 @@ const Login = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                withCredentials: true,
                 body: JSON.stringify(formData),
             });
 
             if (response.ok) {
                 const data = await response.json();
                 sessionStorage.setItem('user', JSON.stringify(data.user));
+                sessionStorage.setItem('token', data.token);
+                sessionStorage.setItem('refreshToken', data.refreshToken);
+                sessionStorage.setItem('expiresAt', data.expiresAt);
                 alert("Login successful!");
                 navigate("/Profile");
             } else {

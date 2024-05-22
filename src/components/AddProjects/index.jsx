@@ -13,8 +13,18 @@ const AddProject = () => {
   const [uploadDate, setUploadDate] = useState("");
   const [userId, setUserId] = useState("");
 
+
   const handleSubmitButton = async (e) => {
     e.preventDefault();
+
+    const token = sessionStorage.getItem("token");
+
+    if (!token) {
+      window.alert("User not authenticated");
+      return;
+    }
+    const userIdFromToken = JSON.parse(atob(token.split(".")[1])).sub;
+    setUserId(userIdFromToken);
 
     if (projectTitle === "" || projectDescription === "" || projectStatus === "" || uploadDate === "" || userId === "") {
       alert("All fields are required");
@@ -34,6 +44,7 @@ const AddProject = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify(projectData),
       });
@@ -132,20 +143,6 @@ const AddProject = () => {
               className="form-control"
               value={uploadDate}
               onChange={(e) => setUploadDate(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label id="name-label" htmlFor="userId">
-              User ID
-            </label>
-            <input
-              type="text"
-              id="userId"
-              className="form-control"
-              value={userId}
-              placeholder="Enter User ID"
-              onChange={(e) => setUserId(e.target.value)}
               required
             />
           </div>
