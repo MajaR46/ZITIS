@@ -14,10 +14,12 @@ import Register from "./components/Registration";
 import Login from "./components/Login";
 import SendInquiry from "./components/SendInquiry";
 import MyProjects from "./components/MyProjects";
+import SessionManager from "./components/SessionManager";
 
 function App() {
   return (
     <>
+    <SessionManager>
       <BrowserRouter>
         <Routes>
           <Route path="/">
@@ -40,6 +42,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      </SessionManager>
     </>
   );
 }

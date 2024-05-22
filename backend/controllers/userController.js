@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const cookieparser = require('cookie-parser');
 require("dotenv").config();
 
 exports.getAllUsers = async (req, res) => {
@@ -129,11 +130,56 @@ exports.login = async (req, res) => {
             process.env.JWT_SECRET
           );
 
-        res.json({ message: 'Login successful', user: userObject, token: token });
+        const refreshToken = jwt.sign({
+            username: user.id,
+        }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
+
+        res.cookie('jwt', refreshToken, {
+            httpOnly: false,
+            sameSite: 'None', 
+            secure: false,
+            maxAge: 24 * 60 * 60 * 1000
+        });
+
+        const expiresAt = Math.floor(Date.now() / 1000) + 60;
+        res.json({ message: 'Login successful', user: userObject, token: token, expiresAt: expiresAt, refreshToken: refreshToken});
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
+
+exports.refreshToken = async (req, res) => {
+    console.log("BODY;" + req.body.refreshToken)
+    if (req.body) {
+        const { refreshToken } = req.body;
+        console.log(refreshToken)
+
+        const userId = req.user.sub;
+        const user = await User.findOne({ _id: userId });
+ 
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET,
+            (err, decoded) => {
+                if (err) {
+                    return res.status(406).json({ message: 'Unauthorized1' });
+                }
+                else {
+                    const token = jwt.sign(
+                        {
+                          sub: user.id.toString(),
+                          name: `${user.firstName} ${user.lastName}`,
+                          iat: Math.floor(Date.now() / 1000),
+                          exp: Math.floor(Date.now() / 1000) + 3600, // 1 hour expiration
+                        },
+                        process.env.JWT_SECRET
+                    );
+                    return res.json({ token: token });
+                }
+            })
+    } else {
+        return res.status(406).json({ message: 'Unauthorized2' });
+    }
+}
+
 
 exports.saveJob = async (req, res) => {
     try {

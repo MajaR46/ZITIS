@@ -29,6 +29,7 @@ const Login = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                withCredentials: true,
                 body: JSON.stringify(formData),
             });
 
@@ -36,6 +37,8 @@ const Login = () => {
                 const data = await response.json();
                 sessionStorage.setItem('user', JSON.stringify(data.user));
                 sessionStorage.setItem('token', data.token);
+                sessionStorage.setItem('refreshToken', data.refreshToken);
+                sessionStorage.setItem('expiresAt', data.expiresAt);
                 alert("Login successful!");
                 navigate("/Profile");
             } else {

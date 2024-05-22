@@ -10,5 +10,6 @@ router.post('/', userController.createUser);
 router.put('/:id', authMiddleware, userController.updateUser);
 router.delete('/:id', authMiddleware, userController.deleteUser);
 router.post('/savejob', authMiddleware, userController.saveJob);
+router.post('/token/refreshtoken', authMiddleware, userController.refreshToken)
 
 module.exports = router;
