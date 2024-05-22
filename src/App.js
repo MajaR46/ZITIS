@@ -14,11 +14,13 @@ import Register from "./components/Registration";
 import Login from "./components/Login";
 import SendInquiry from "./components/SendInquiry";
 import MyProjects from "./components/MyProjects";
+import SessionManager from "./components/SessionManager";
 
 function App() {
   return (
     <>
       <BrowserRouter>
+      <SessionManager>
         <Routes>
           <Route path="/">
             <Route index element={<Home />} />
@@ -39,6 +41,7 @@ function App() {
             <Route path="*" element={<ErrorPage />} />
           </Route>
         </Routes>
+        </SessionManager>
       </BrowserRouter>
     </>
   );

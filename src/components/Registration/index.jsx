@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 
-// TODO: Add authentication token, Secure Token Handling
+// TODO: Add authentication token, Secure Token Handling - ne rabimo ker je registracija
 
 const Register = () => {
   const navigate = useNavigate();

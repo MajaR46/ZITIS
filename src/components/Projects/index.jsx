@@ -27,9 +27,25 @@ const ProjectCard = ({
     }
   }, [id]);
 
+  const token = sessionStorage.getItem("token");
+
+  if (!token) {
+    window.alert("User not authenticated");
+    return;
+  }
+
   const fetchComments = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/review/project/${id}`);
+      const response = await fetch(`http://localhost:3001/api/review/project/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
       const data = await response.json();
       setComments(data);
     } catch (error) {
@@ -37,6 +53,7 @@ const ProjectCard = ({
       setComments([]);  // Initialize as an empty array in case of error
     }
   };
+
 
   const addComment = async () => {
     if (!loggedInUser) {
@@ -57,6 +74,7 @@ const ProjectCard = ({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify(newComment),
       });
@@ -80,6 +98,7 @@ const ProjectCard = ({
     try {
       const response = await fetch(`http://localhost:3001/api/review/${commentId}`, {
         method: "DELETE",
+        "Authorization": `Bearer ${token}`
       });
       if (response.ok) {
         setComments(comments.filter(comment => comment._id !== commentId));
@@ -110,6 +129,7 @@ const ProjectCard = ({
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ comment }),
       });
