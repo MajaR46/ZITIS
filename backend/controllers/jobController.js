@@ -92,3 +92,15 @@ exports.deleteJob = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.getUsersJobs = async (req, res) => {
+  try {
+      console.log(req.params);
+      const userId = req.params.id;
+      console.log(userId);
+      const jobs = await Job.find({ userId: userId });
+      res.json(jobs);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};

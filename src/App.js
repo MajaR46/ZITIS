@@ -13,6 +13,8 @@ import Register from "./components/Registration";
 import Login from "./components/Login";
 import SendInquiry from "./components/SendInquiry";
 import MyProjects from "./components/MyProjects";
+import SessionManager from "./components/SessionManager";
+import MyJobs from './components/MyJobs';
 
 function App() {
   return (

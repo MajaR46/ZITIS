@@ -2,47 +2,49 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar";
 import { Link } from "react-router-dom";
 import "./index.css";
-import ProjectData from "./../../Assets/projects.json";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 
+
 const MyProjects = () => {
-  const savedProjects = JSON.parse(localStorage.getItem("projects")) || [];
-  const [filteredProjects, setFilteredProjects] = useState(savedProjects);
-
-  useEffect(() => {
-    const user = JSON.parse(sessionStorage.getItem("user"));
-    if (user) {
-      const userProjects = ProjectData.filter(
-        (project) => project.userId === user._id
-      );
-      setFilteredProjects(userProjects);
-    }
-  }, []);
-
+  const [filteredProjects, setFilteredProjects] = useState([]);
   const [active, setActive] = useState(false);
 
-  function saveProject(
-    id,
-    projectTitle,
-    projectDescription,
-    projectStatus,
-    uploadDate,
-    userId,
-    __v
-  ) {
-    const projectData = {
-      id,
-      projectTitle,
-      projectDescription,
-      projectStatus,
-      uploadDate,
-      userId,
-      __v,
-    };
+  const fetchMyProjects = async () => {
 
-    window.localStorage.setItem("SavedProject", JSON.stringify(projectData));
-    console.log(projectData);
-  }
+    const token = sessionStorage.getItem("token");
+
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    if (!user) {
+      console.error("No user found in session storage");
+      return;
+    }
+
+    const { _id: userId } = user;
+
+    try {
+      const response = await fetch(`http://localhost:3001/api/project/user/${userId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Fetched Projects:", data);
+      setFilteredProjects(data);
+    } catch (error) {
+      console.error("Error fetching my projects:", error);
+      setFilteredProjects([]);
+    }
+  };
+
+  useEffect(() => {
+    fetchMyProjects();
+  }, []);
 
   return (
     <>
@@ -55,64 +57,46 @@ const MyProjects = () => {
         </div>
         <div className="job-section">
           <div className="job-page">
-            {filteredProjects.map(
-              ({
-                id,
+            {filteredProjects.map((project) => {
+              const {
+                _id: id,
                 projectTitle,
                 projectDescription,
                 projectStatus,
                 uploadDate,
                 userId,
-                __v,
-              }) => {
-                return (
-                  <div className="job-list" key={id}>
-                    <div className="job-card">
-                      <div className="job-name">
-                        <div className="job-detail">
-                          <h4>{projectTitle}</h4>
-                          <p>{projectDescription}</p>
-                          <div className="category">
-                            <p>Status: {projectStatus}</p>
-                            <p>Uploaded: {uploadDate}</p>
-                            <p>User ID: {userId}</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="job-button">
-                        <div className="job-posting">
-                          <Link to="/send-inquiry">View project</Link>
-                        </div>
-                        <div className="save-button">
-                          <Link
-                            to="/Projects"
-                            onClick={() => {
-                              saveProject(
-                                id,
-                                projectTitle,
-                                projectDescription,
-                                projectStatus,
-                                uploadDate,
-                                userId,
-                                __v
-                              );
-                              setActive(!active);
-                            }}
-                          >
-                            {JSON.parse(localStorage.getItem("Job"))?.id ===
-                              id ? (
-                              <AiFillHeart />
-                            ) : (
-                              <AiOutlineHeart />
-                            )}
-                          </Link>
+              } = project;
+              return (
+                <div className="job-list" key={id}>
+                  <div className="job-card">
+                    <div className="job-name">
+                      <div className="job-detail">
+                        <h4>{projectTitle}</h4>
+                        <p>{projectDescription}</p>
+                        <div className="category">
+                          <p>Status: {projectStatus}</p>
+                          <p>Uploaded: {new Date(uploadDate).toLocaleDateString()}</p>
+                          <p>User ID: {userId}</p>
                         </div>
                       </div>
                     </div>
+                    <div className="job-button">
+                      <div className="job-posting">
+                        <Link to="/send-inquiry">View project</Link>
+                      </div>
+                      <div className="save-button">
+                        <Link
+                          to="/Projects"
+                          onClick={() => setActive(!active)}
+                        >
+                          {active ? <AiFillHeart /> : <AiOutlineHeart />}
+                        </Link>
+                      </div>
+                    </div>
                   </div>
-                );
-              }
-            )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
