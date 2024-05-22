@@ -19,8 +19,8 @@ import SessionManager from "./components/SessionManager";
 function App() {
   return (
     <>
-    <SessionManager>
       <BrowserRouter>
+      <SessionManager>
         <Routes>
           <Route path="/">
             <Route index element={<Home />} />
@@ -41,8 +41,8 @@ function App() {
             <Route path="*" element={<ErrorPage />} />
           </Route>
         </Routes>
+        </SessionManager>
       </BrowserRouter>
-      </SessionManager>
     </>
   );
 }

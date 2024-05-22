@@ -9,20 +9,21 @@ const SessionManager = ({ children }) => {
   const [refreshToken] = useState(sessionStorage.getItem("refreshToken"));
 
   useEffect(() => {
-    const tokenExpirationTime = sessionStorage.getItem('expiresAt');
-    const expirationDate = new Date(tokenExpirationTime * 1000);
-    if (tokenExpirationTime) {
-      const expiresIn = expirationDate - Date.now();
-      const notificationTimer = setTimeout(() => {
-        setShowNotification(true);
-      }, expiresIn - 60000);
+    if (token) {
+      const tokenExpirationTime = sessionStorage.getItem('expiresAt');
+      const expirationDate = new Date(tokenExpirationTime * 1000);
 
-      return () => clearTimeout(notificationTimer);
-    } else {
-        // Token has expired
+      if (expirationDate > Date.now()) {
+        const notificationTimer = setTimeout(() => {
+          setShowNotification(true);
+        }, expirationDate - Date.now() - 60000);
+
+        return () => clearTimeout(notificationTimer);
+      } else {
         handleLogout();
       }
-  }, []);
+    }
+  }, [token]);
 
   const handleLogout = () => {
     sessionStorage.clear();
