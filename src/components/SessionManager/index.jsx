@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+//TODO: Frontend team - Make notification for prolonging session prettier. 
+
 const SessionManager = ({ children }) => {
   const [showNotification, setShowNotification] = useState(false);
   const token = sessionStorage.getItem("token");
@@ -7,17 +9,30 @@ const SessionManager = ({ children }) => {
 
   console.log("refreshtoken:" + refreshToken)
 
+  const dataToSend = {
+    refreshToken: refreshToken
+  };
+
   useEffect(() => {
     const tokenExpirationTime = sessionStorage.getItem('expiresAt');
+    const expirationDate = new Date(tokenExpirationTime * 1000);
     if (tokenExpirationTime) {
-      const expiresIn = tokenExpirationTime - Date.now();
+      const expiresIn = expirationDate - Date.now();
       const notificationTimer = setTimeout(() => {
         setShowNotification(true);
-      }, expiresIn - 60000); // Show notification 1 minute before session expiration
+      }, expiresIn - 60000);
 
       return () => clearTimeout(notificationTimer);
-    }
+    } else {
+        // Token has expired
+        handleLogout();
+      }
   }, []);
+
+  const handleLogout = () => {
+    sessionStorage.clear();
+    window.location.href = "/login";
+  };
 
   const prolongSession = async () => {
     try {
@@ -25,10 +40,13 @@ const SessionManager = ({ children }) => {
         const response = await fetch("http://localhost:3001/api/user/token/refreshtoken", {
           method: "POST",
           headers: {
+            "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
           },
-          body: JSON.stringify({ refreshToken }),
+          body: JSON.stringify(dataToSend),
         });
+
+        console.log(JSON.stringify(dataToSend))
 
         if (response.ok) {
           const data = await response.json();
