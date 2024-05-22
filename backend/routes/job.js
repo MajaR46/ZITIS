@@ -11,5 +11,6 @@ router.get('/:id', jobController.getJobById);
 router.post('/', authMiddleware, jobController.createJob);
 router.put('/:id', authMiddleware, jobController.updateJob);
 router.delete('/:id', authMiddleware, jobController.deleteJob);
+router.post('/notify', authMiddleware, jobController.sendNotification)
 
 module.exports = router;
