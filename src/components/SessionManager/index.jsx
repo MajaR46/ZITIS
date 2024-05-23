@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-
-//TODO: Frontend team - Make notification for prolonging session prettier. 
+import "./index.css";
 
 const SessionManager = ({ children }) => {
   const [showNotification, setShowNotification] = useState(false);
@@ -10,7 +9,7 @@ const SessionManager = ({ children }) => {
 
   useEffect(() => {
     if (token) {
-      const tokenExpirationTime = sessionStorage.getItem('expiresAt');
+      const tokenExpirationTime = sessionStorage.getItem("expiresAt");
       const expirationDate = new Date(tokenExpirationTime * 1000);
 
       if (expirationDate > Date.now()) {
@@ -33,21 +32,24 @@ const SessionManager = ({ children }) => {
   const prolongSession = async () => {
     try {
       if (refreshToken) {
-        const response = await fetch("http://localhost:3001/api/user/token/refreshtoken", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          },
-          body: JSON.stringify({
-            refreshToken: refreshToken
-          }),
-        });
+        const response = await fetch(
+          "http://localhost:3001/api/user/token/refreshtoken",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              refreshToken: refreshToken,
+            }),
+          }
+        );
 
         if (response.ok) {
           const data = await response.json();
-          sessionStorage.setItem('token', data.token);
-          sessionStorage.setItem('expiresAt', data.expiresAt);
+          sessionStorage.setItem("token", data.token);
+          sessionStorage.setItem("expiresAt", data.expiresAt);
           console.log("Token refreshed successfully:", data);
           setShowNotification(false);
         } else {
@@ -64,9 +66,14 @@ const SessionManager = ({ children }) => {
   return (
     <>
       {showNotification && (
-        <div>
-          <p>Your session will expire soon. Do you want to prolong your session?</p>
-          <button onClick={prolongSession}>Prolong Session</button>
+        <div className="modal">
+          <div className="modal-content">
+            <p>
+              Your session will expire soon. Do you want to prolong your
+              session?
+            </p>
+            <button onClick={prolongSession}>Prolong Session</button>
+          </div>
         </div>
       )}
       {children}
