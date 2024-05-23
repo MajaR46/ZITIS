@@ -125,8 +125,7 @@ exports.sendNotification = async (req, res) => {
 
 exports.getUsersJobs = async (req, res) => {
   try {
-      console.log(req.params);
-      const userId = req.params.id;
+      const userId = req.user.sub;
       console.log(userId);
       const jobs = await Job.find({ userId: userId });
       res.json(jobs);

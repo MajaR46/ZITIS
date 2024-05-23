@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../Navbar";
 import { Link } from "react-router-dom";
 import "./index.css";
@@ -19,7 +20,35 @@ const ProjectCard = ({
   const [comments, setComments] = useState([]);
   const [showCommentBox, setShowCommentBox] = useState(false);
   const [editCommentId, setEditCommentId] = useState(null);
-  const loggedInUser = JSON.parse(sessionStorage.getItem("user"));
+  const [loggedInUser, setLoggedInUser] = useState(null);
+  const navigate = useNavigate();
+
+  const fetchLoggedInUser = async () => {
+    const token = sessionStorage.getItem("token");
+
+    try {
+      const response = await fetch(`http://localhost:3001/api/user/my-user`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setLoggedInUser(data);
+    } catch (error) {
+      console.error("Error fetching current user:", error);
+      navigate("/login");
+    }
+  };
+
+  useEffect(() => {
+    fetchLoggedInUser();
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -30,7 +59,7 @@ const ProjectCard = ({
   const token = sessionStorage.getItem("token");
 
   if (!token) {
-    window.alert("User not authenticated");
+    navigate("/login");
     return;
   }
 

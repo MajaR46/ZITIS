@@ -1,19 +1,46 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar";
 import "./index.css";
 
 // TODO: For frontend team, add a button to edit the profile, and a button to delete the profile. For backend team, connect with neccessary routes to update and delete the profile. Include authentication token or session data for the user to be able to edit or delete their profile
 
 const Profile = () => {
-  const loggedInUser = JSON.parse(sessionStorage.getItem("user"));
+  const [user, setUser] = useState(null);
+
+  const fetchMyUser = async () => {
+    const token = sessionStorage.getItem("token");
+
+    try {
+      const response = await fetch(`http://localhost:3001/api/user/my-user`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Fetched User:", data);
+      setUser(data);
+    } catch (error) {
+      console.error("Error fetching current user:", error);
+      setUser(null);
+    }
+  };
+
+  useEffect(() => {
+    fetchMyUser();
+  }, []);
 
   const handleLogout = () => {
     sessionStorage.clear();
     window.location.href = "/login";
   };
 
-  if (!loggedInUser) {
-    window.location.href = "/login";
+  if (!user) {
     return null;
   }
 
@@ -22,35 +49,32 @@ const Profile = () => {
       <Navbar />
       <div className="job-background">
         <div className="title">
-          Hi,{" "}
-          {loggedInUser.role === "company"
-            ? loggedInUser.name
-            : loggedInUser.firstName}
+          Hi, {user.role === "company" ? user.name : user.firstName}
         </div>
       </div>
       <div className="job-section">
         <div className="job-page">
-          {loggedInUser.role === "admin" ? (
+          {user.role === "admin" ? (
             <div className="user-title">
               <h2>Admin Profile</h2>
               <p>Admins have special privileges.</p>
             </div>
-          ) : loggedInUser.role === "company" ? (
+          ) : user.role === "company" ? (
             <>
               <div className="user-title">
                 <h2>Company Profile</h2>
               </div>
               <div className="profile-card-info">
                 <div className="job-detail">
-                  <h4>{loggedInUser.name}</h4>
+                  <h4>{user.name}</h4>
                   <p>
-                    <strong>Email:</strong> {loggedInUser.email}
+                    <strong>Email:</strong> {user.email}
                   </p>
                   <p>
-                    <strong>Location:</strong> {loggedInUser.location}
+                    <strong>Location:</strong> {user.location}
                   </p>
                   <p>
-                    <strong>Description:</strong> {loggedInUser.description}
+                    <strong>Description:</strong> {user.description}
                   </p>
                 </div>
               </div>
@@ -63,16 +87,16 @@ const Profile = () => {
               <div className="profile-card-info">
                 <div className="job-detail">
                   <h4>
-                    {loggedInUser.firstName} {loggedInUser.lastName}
+                    {user.firstName} {user.lastName}
                   </h4>
                   <p>
-                    <strong>Email:</strong> {loggedInUser.email}
+                    <strong>Email:</strong> {user.email}
                   </p>
                   <p>
-                    <strong>Location:</strong> {loggedInUser.location}
+                    <strong>Location:</strong> {user.location}
                   </p>
                   <p>
-                    <strong>Bio:</strong> {loggedInUser.bio}
+                    <strong>Bio:</strong> {user.bio}
                   </p>
                 </div>
               </div>
@@ -80,7 +104,7 @@ const Profile = () => {
                 <h2>SKILLS</h2>
               </div>
               <div className="profile-cards">
-                {loggedInUser.skills.map((skill, index) => (
+                {user.skills.map((skill, index) => (
                   <div className="profile-card" key={index}>
                     <div className="job-detail">
                       <h4>{skill}</h4>

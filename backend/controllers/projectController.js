@@ -86,9 +86,7 @@ exports.deleteProject = async (req, res) => {
 
 exports.getUsersProjects = async (req, res) => {
     try {
-        console.log(req.params);
-        const userId = req.params.id;
-        console.log(userId);
+        const userId = req.user.sub;
         const projects = await Project.find({ userId: userId });
         res.json(projects);
     } catch (error) {

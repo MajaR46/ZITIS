@@ -14,16 +14,8 @@ const MyJobs = () => {
 
     const token = sessionStorage.getItem("token");
 
-    const user = JSON.parse(sessionStorage.getItem("user"));
-    if (!user) {
-      console.error("No user found in session storage");
-      return;
-    }
-
-    const { _id: userId } = user;
-
     try {
-      const response = await fetch(`http://localhost:3001/api/job/user/${userId}`, {
+      const response = await fetch(`http://localhost:3001/api/job/user/my-jobs`, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
