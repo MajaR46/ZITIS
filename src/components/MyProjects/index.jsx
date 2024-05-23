@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./index.css";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 
-
 const MyProjects = () => {
   const [filteredProjects, setFilteredProjects] = useState([]);
-  const [active, setActive] = useState(false);
+  const [activeStates, setActiveStates] = useState({});
+  const navigate = useNavigate();
+
 
   const fetchMyProjects = async () => {
-
     const token = sessionStorage.getItem("token");
 
     try {
@@ -37,6 +37,40 @@ const MyProjects = () => {
   useEffect(() => {
     fetchMyProjects();
   }, []);
+
+  const handleLikeToggle = (projectId) => {
+    setActiveStates((prevStates) => ({
+      ...prevStates,
+      [projectId]: !prevStates[projectId],
+    }));
+  };
+
+  const handleDeleteProject = async (projectId) => {
+    const token = sessionStorage.getItem("token");
+
+    try {
+      const response = await fetch(`http://localhost:3001/api/project/${projectId}`, {
+        method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // Remove the deleted project from the state
+      setFilteredProjects(filteredProjects.filter(project => project._id !== projectId));
+    } catch (error) {
+      console.error("Error deleting project:", error);
+    }
+  };
+
+  const handleEditProject = (projectId) => {
+    navigate(`/edit-project/${projectId}`);
+  };
 
   return (
     <>
@@ -74,16 +108,17 @@ const MyProjects = () => {
                     </div>
                     <div className="job-button">
                       <div className="job-posting">
-                        <Link to="/send-inquiry">View project</Link>
+                        <Link to={`/project/${id}`}>View project</Link>
                       </div>
-                      <div className="save-button">
-                        <Link
-                          to="/Projects"
-                          onClick={() => setActive(!active)}
-                        >
-                          {active ? <AiFillHeart /> : <AiOutlineHeart />}
-                        </Link>
+                      <div className="save-button" onClick={() => handleLikeToggle(id)}>
+                        {activeStates[id] ? <AiFillHeart /> : <AiOutlineHeart />}
                       </div>
+                    </div>
+                    <div className="edit-delete-button">
+                      <button onClick={() => handleEditProject(id)}>Edit project</button>
+                    </div>
+                    <div className="edit-delete-button">
+                      <button onClick={() => handleDeleteProject(id)}>Delete</button>
                     </div>
                   </div>
                 </div>
