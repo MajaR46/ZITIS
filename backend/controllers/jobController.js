@@ -1,4 +1,5 @@
 const Job = require('../models/Job');
+const User = require('../models/User');
 
 exports.getAllJobs = async (req, res) => {
   try {
@@ -90,6 +91,35 @@ exports.deleteJob = async (req, res) => {
     res.json({ message: 'Job deleted' });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+exports.sendNotification = async (req, res) => {
+  try {
+    const { sub: sendingUserId } = req.user;
+    const { jobId, userId: receivingUserId } = req.body;
+
+    if (!sendingUserId || !jobId || !receivingUserId) {
+      return res.status(400).json({ message: 'User ID and Job ID are required.' });
+    }
+
+    const [job, sendingUser, receivingUser] = await Promise.all([
+      Job.findById(jobId),
+      User.findById(sendingUserId),
+      User.findById(receivingUserId)
+    ]);
+
+    if (!job || !sendingUser || !receivingUser) {
+      return res.status(404).json({ message: `${!job ? 'Job' : !sendingUser ? 'Sending user' : 'Receiving user'} not found.` });
+    }
+
+    receivingUser.notifications.push(`${sendingUser.firstName} ${sendingUser.lastName} is interested in your posted job: ${job.company} ${job.position} ${job.role}`);
+    await receivingUser.save();
+
+    res.json({ message: 'Notification sent successfully.' });
+  } catch (error) {
+    console.error('Error sending notification:', error);
+    res.status(500).json({ message: 'An error occurred while sending the notification. Please try again later.' });
   }
 };
 

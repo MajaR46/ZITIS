@@ -11,5 +11,6 @@ router.post('/', authMiddleware, projectController.createProject);
 router.put('/:id', authMiddleware, projectController.updateProject);
 router.delete('/:id', authMiddleware, projectController.deleteProject);
 router.get('/user/:id', authMiddleware, projectController.getUsersProjects);
+router.post('/notify', authMiddleware, projectController.sendNotification)
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const Project = require('../models/project');
+const User = require('../models/User')
 
 exports.getAllProjects = async (req, res) => {
     try {
@@ -94,3 +95,32 @@ exports.getUsersProjects = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+exports.sendNotification = async (req, res) => {
+    try {
+      const { sub: sendingUserId } = req.user;
+      const { projectId, userId: receivingUserId } = req.body;
+  
+      if (!sendingUserId || !projectId || !receivingUserId) {
+        return res.status(400).json({ message: 'User ID and project ID are required.' });
+      }
+  
+      const [project, sendingUser, receivingUser] = await Promise.all([
+        Project.findById(projectId),
+        User.findById(sendingUserId),
+        User.findById(receivingUserId)
+      ]);
+  
+      if (!project || !sendingUser || !receivingUser) {
+        return res.status(404).json({ message: `${!project ? 'project' : !sendingUser ? 'Sending user' : 'Receiving user'} not found.` });
+      }
+  
+      receivingUser.notifications.push(`${sendingUser.firstName} ${sendingUser.lastName} is interested in your posted project: ${project.projectTitle} ${project.projectDescription}`);
+      await receivingUser.save();
+  
+      res.json({ message: 'Notification sent successfully.' });
+    } catch (error) {
+      console.error('Error sending notification:', error);
+      res.status(500).json({ message: 'An error occurred while sending the notification. Please try again later.' });
+    }
+  };

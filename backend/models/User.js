@@ -45,6 +45,10 @@ const userSchema = mongoose.Schema({
   savedJobs: {
     type: [String],
     required: false
+  },
+  notifications: {
+    type: [String],
+    required: false
   }
 });
 
