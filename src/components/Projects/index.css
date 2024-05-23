@@ -132,9 +132,6 @@
   }
 }
 
-.save-button {
-  font-size: 22px;
-}
 
 .job-button {
   display: flex;
@@ -143,21 +140,52 @@
 }
 
 .addComment {
-  background-color: #6b5df2;
+  background-color: #007bff;
 }
 
 .comment-section {
   text-align: start;
   display: block;
 }
-
-.commentBox {
-  display: block;
-  margin-top: 1rem;
-  margin-bottom: 1.3rem;
-  padding: 0.5rem;
+.comment-box {
+  position: relative;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 1rem;
 }
 
-.comments {
-  background-color: #f0f0fd;
+.closeCommentBox {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  visibility: visible; /* Ensure the button is always visible */
+}
+
+.commentBox {
+  width: calc(100% - 2.6rem); /* Adjusting width to accommodate the close button */
+  height: 100px;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 0.5px solid #ccc;
+}
+
+.addComment {
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.toggleCommentBox {
+  margin-top: 1rem;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
