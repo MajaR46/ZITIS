@@ -3,8 +3,14 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../Navbar";
 import { Link } from "react-router-dom";
 import "./index.css";
-import { AiOutlineHeart, AiFillHeart, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import {
+  AiOutlineHeart,
+  AiFillHeart,
+  AiOutlineEdit,
+  AiOutlineDelete,
+} from "react-icons/ai";
 import ProjectFilter from "../ProjectFilter";
+import PrimaryButton from "../buttons/PrimaryButton";
 
 //TODO: fix the part with the comments/reviws
 
@@ -30,7 +36,7 @@ const ProjectCard = ({
       const response = await fetch(`http://localhost:3001/api/user/my-user`, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -65,13 +71,16 @@ const ProjectCard = ({
 
   const fetchComments = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/review/project/${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-      });
-  
+      const response = await fetch(
+        `http://localhost:3001/api/review/project/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -79,10 +88,9 @@ const ProjectCard = ({
       setComments(data);
     } catch (error) {
       console.error("Error fetching comments:", error);
-      setComments([]);  // Initialize as an empty array in case of error
+      setComments([]); // Initialize as an empty array in case of error
     }
   };
-
 
   const addComment = async () => {
     if (!loggedInUser) {
@@ -103,7 +111,7 @@ const ProjectCard = ({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(newComment),
       });
@@ -125,12 +133,15 @@ const ProjectCard = ({
 
   const deleteComment = async (commentId) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/review/${commentId}`, {
-        method: "DELETE",
-        "Authorization": `Bearer ${token}`
-      });
+      const response = await fetch(
+        `http://localhost:3001/api/review/${commentId}`,
+        {
+          method: "DELETE",
+          Authorization: `Bearer ${token}`,
+        }
+      );
       if (response.ok) {
-        setComments(comments.filter(comment => comment._id !== commentId));
+        setComments(comments.filter((comment) => comment._id !== commentId));
       } else {
         const errorData = await response.json();
         console.error("Error deleting comment:", errorData);
@@ -142,9 +153,8 @@ const ProjectCard = ({
     }
   };
 
-
   const editComment = (commentId) => {
-    const commentToEdit = comments.find(comment => comment._id === commentId);
+    const commentToEdit = comments.find((comment) => comment._id === commentId);
     if (commentToEdit) {
       setComment(commentToEdit.comment);
       setEditCommentId(commentId);
@@ -154,16 +164,23 @@ const ProjectCard = ({
 
   const updateComment = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/review/${editCommentId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({ comment }),
-      });
+      const response = await fetch(
+        `http://localhost:3001/api/review/${editCommentId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ comment }),
+        }
+      );
       if (response.ok) {
-        setComments(comments.map(comment => (comment._id === editCommentId ? { ...comment, comment } : comment)));
+        setComments(
+          comments.map((comment) =>
+            comment._id === editCommentId ? { ...comment, comment } : comment
+          )
+        );
         setComment("");
         setEditCommentId(null);
         setShowCommentBox(false);
@@ -193,18 +210,17 @@ const ProjectCard = ({
           </div>
         </div>
         <div className="job-button">
-          <div className="job-posting">
-            <Link to="/send-inquiry">View project</Link>
-          </div>
-          <div className="save-button">
-            <Link to="/Projects">
-              {JSON.parse(localStorage.getItem("Job"))?.id === id ? (
-                <AiFillHeart />
-              ) : (
-                <AiOutlineHeart />
-              )}
-            </Link>
-          </div>
+          <PrimaryButton
+            text="View project"
+            onClick={() => navigate("/send-inquiry")}
+          />
+          <Link to="/Projects">
+            {JSON.parse(localStorage.getItem("Job"))?.id === id ? (
+              <AiFillHeart />
+            ) : (
+              <AiOutlineHeart />
+            )}
+          </Link>
         </div>
       </div>
       <div className="comment-section">
@@ -221,21 +237,29 @@ const ProjectCard = ({
             </button>
           </>
         )}
-        <button className="addComment" onClick={() => setShowCommentBox(!showCommentBox)}>
+        <button
+          className="addComment"
+          onClick={() => setShowCommentBox(!showCommentBox)}
+        >
           {showCommentBox ? "Hide Comment" : "Add a Comment"}
         </button>
         <div className="comments">
-          {Array.isArray(comments) && comments.map((comment, index) => (
-            <div key={index} className="comment">
-              <p>
-                <strong>{comment.userId}</strong>: {comment.comment}
-              </p>
-              <div className="comment-actions">
-                <button onClick={() => editComment(comment._id)}><AiOutlineEdit /></button>
-                <button onClick={() => deleteComment(comment._id)}><AiOutlineDelete /></button>
+          {Array.isArray(comments) &&
+            comments.map((comment, index) => (
+              <div key={index} className="comment">
+                <p>
+                  <strong>{comment.userId}</strong>: {comment.comment}
+                </p>
+                <div className="comment-actions">
+                  <button onClick={() => editComment(comment._id)}>
+                    <AiOutlineEdit />
+                  </button>
+                  <button onClick={() => deleteComment(comment._id)}>
+                    <AiOutlineDelete />
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>
@@ -255,7 +279,9 @@ const Projects = () => {
     let url = "http://localhost:3001/api/project";
 
     if (selectedStatus.length && !selectedStatus.includes("All")) {
-      url = `http://localhost:3001/api/project/status/${selectedStatus.join(",")}`;
+      url = `http://localhost:3001/api/project/status/${selectedStatus.join(
+        ","
+      )}`;
     }
 
     try {
@@ -318,9 +344,10 @@ const Projects = () => {
         </div>
         <div className="job-section">
           <div className="job-page">
-            {Array.isArray(projects) && projects.map((project) => (
-              <ProjectCard key={project._id} {...project} />
-            ))}
+            {Array.isArray(projects) &&
+              projects.map((project) => (
+                <ProjectCard key={project._id} {...project} />
+              ))}
           </div>
           <ProjectFilter
             handleStatusFilter={handleStatusFilter}

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./index.css";
 import Filter from "../Filter";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-
+import PrimaryButton from "../buttons/PrimaryButton";
 const experience = [
   { min: 0, max: 1 },
   { min: 2, max: 3 },
@@ -19,6 +19,7 @@ const Jobs = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [active, setActive] = useState(false);
   const [roles, setRoles] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchJobs();
@@ -46,7 +47,9 @@ const Jobs = () => {
 
   const handleJobFilter = async (role) => {
     try {
-      const response = await axios.get(`http://localhost:3001/api/job/role/${role}`);
+      const response = await axios.get(
+        `http://localhost:3001/api/job/role/${role}`
+      );
       setFilteredJobs(response.data);
     } catch (error) {
       console.error("There was an error filtering jobs by role!", error);
@@ -63,10 +66,7 @@ const Jobs = () => {
     setSearchTerm(data);
     if (data !== "" || data.length > 2) {
       const filterData = jobs.filter((item) =>
-        Object.values(item)
-          .join("")
-          .toLowerCase()
-          .includes(data.toLowerCase())
+        Object.values(item).join("").toLowerCase().includes(data.toLowerCase())
       );
       setFilteredJobs(filterData);
     } else {
@@ -89,10 +89,12 @@ const Jobs = () => {
     }
 
     try {
-      const results = await Promise.all(filters.map(filter =>
-        axios.get(`http://localhost:3001/api/job/experience/${filter}`)
-      ));
-      const filteredJobs = results.flatMap(result => result.data);
+      const results = await Promise.all(
+        filters.map((filter) =>
+          axios.get(`http://localhost:3001/api/job/experience/${filter}`)
+        )
+      );
+      const filteredJobs = results.flatMap((result) => result.data);
       setFilteredJobs(filteredJobs);
     } catch (error) {
       console.error("There was an error filtering jobs by experience!", error);
@@ -130,23 +132,30 @@ const Jobs = () => {
                       </div>
                     </div>
                     <div className="job-button">
-                      <div className="job-posting">
-                        <Link to="/apply-jobs">Apply Now</Link>
-                      </div>
-                      <div className="save-button">
-                        <Link
-                          to="/Jobs"
-                          onClick={() => {
-                            saveClick({ _id, company, position, location, posted });
-                          }}
-                        >
-                          {JSON.parse(localStorage.getItem("Job"))?._id === _id ? (
-                            <AiFillHeart />
-                          ) : (
-                            <AiOutlineHeart />
-                          )}
-                        </Link>
-                      </div>
+                      <PrimaryButton
+                        text="Apply Now"
+                        onClick={() => navigate("/apply-jobs")}
+                      />
+
+                      <Link
+                        to="/Jobs"
+                        onClick={() => {
+                          saveClick({
+                            _id,
+                            company,
+                            position,
+                            location,
+                            posted,
+                          });
+                        }}
+                      >
+                        {JSON.parse(localStorage.getItem("Job"))?._id ===
+                        _id ? (
+                          <AiFillHeart />
+                        ) : (
+                          <AiOutlineHeart />
+                        )}
+                      </Link>
                     </div>
                   </div>
                 </div>
