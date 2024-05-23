@@ -160,9 +160,7 @@
   }
 }
 
-.save-button {
-  font-size: 22px;
-}
+
 
 .profile-button {
   align-items: center;
@@ -188,7 +186,6 @@
 .delete-button {
   text-decoration: none;
   color: white;
-  font-weight: bold;
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
@@ -212,8 +209,3 @@
   transition: 400ms ease-in-out;
 }
 
-.save-button {
-  font-size: 22px;
-  color: #dc3545; /* Update heart icon color to match the delete button */
-  cursor: pointer;
-}

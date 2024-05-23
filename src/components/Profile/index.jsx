@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar";
-import EditProfile from "./EdirProfile";
+import EditProfile from "../EditProfile/EditProfile";
 import ConfirmModal from "../modals/ConfirmModal";
 import "./index.css";
+import PrimaryButton from "../buttons/PrimaryButton";
+import CancelButton from "../buttons/CancelButton";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -185,18 +187,20 @@ const Profile = () => {
                   </div>
                 </>
               )}
-              <button
-                className="profile-button"
-                onClick={() => setIsEditing(true)}
-              >
-                Edit Profile
-              </button>
-              <button className="profile-button" onClick={confirmDelete}>
-                Delete Profile
-              </button>
-              <button className="profile-button" onClick={handleLogout}>
-                Logout
-              </button>
+              <div className="button-group">
+                <div>
+                  <PrimaryButton
+                    text="Edit Profile"
+                    onClick={() => setIsEditing(true)}
+                  />
+                </div>
+                <div>
+                  <CancelButton text="Delete Profile" onClick={confirmDelete} />
+                </div>
+                <div>
+                  <PrimaryButton text="Logout" onClick={handleLogout} />
+                </div>
+              </div>
             </>
           )}
         </div>

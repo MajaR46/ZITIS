@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./EditProject.css";
+import SaveButton from "../buttons/SaveButton";
+import CancelButton from "../buttons/CancelButton";
 
 const EditProject = ({ project, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -51,12 +53,9 @@ const EditProject = ({ project, onSave, onCancel }) => {
         </select>
       </label>
       <div className="button-group">
-        <button type="submit" className="save-button">
-          Save
-        </button>
-        <button type="button" className="cancel-button" onClick={onCancel}>
-          Cancel
-        </button>
+        <SaveButton text="Save" />
+
+        <CancelButton text="Cancel" onClick={onCancel} />
       </div>
     </form>
   );

@@ -19,6 +19,7 @@ label {
 }
 button {
   border: none;
+  align-self: center;
 }
 .container {
   width: 100%;
@@ -91,12 +92,3 @@ form {
   resize: vertical;
 }
 
-.submit-button {
-  display: block;
-  width: 100%;
-  padding: 0.75rem;
-  background: Green;
-  color: White;
-  border-radius: 2px;
-  cursor: pointer;
-}

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar";
 import "./index.css";
-import EditProject from "./EditProject";
+import EditProject from "../EditProject/EditProject";
 import ConfirmModal from "../modals/ConfirmModal";
+import CancelButton from "../buttons/CancelButton";
+import PrimaryButton from "../buttons/PrimaryButton";
 
 const MyProjects = () => {
   const [filteredProjects, setFilteredProjects] = useState([]);
@@ -162,18 +164,15 @@ const MyProjects = () => {
                       </div>
                     </div>
                     <div className="job-button">
-                      <button
-                        className="edit-button"
+                      <PrimaryButton
+                        text="Edit Project"
                         onClick={() => setIsEditing(id)}
-                      >
-                        Edit Project
-                      </button>
-                      <button
-                        className="delete-button"
+                      />
+
+                      <CancelButton
+                        text="Delete Project"
                         onClick={() => confirmDelete(id)}
-                      >
-                        Delete Project
-                      </button>
+                      />
                     </div>
                   </div>
                 </div>

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./EditProfile.css";
+import SaveButton from "../buttons/SaveButton";
+import CancelButton from "../buttons/CancelButton";
 
 const EditProfile = ({ user, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -67,12 +69,8 @@ const EditProfile = ({ user, onSave, onCancel }) => {
         ></textarea>
       </label>
       <div className="button-group">
-        <button type="submit" className="save-button">
-          Save
-        </button>
-        <button type="button" className="cancel-button" onClick={onCancel}>
-          Cancel
-        </button>
+        <SaveButton text="Save" />
+        <CancelButton text="Cancel" onClick={onCancel} />
       </div>
     </form>
   );

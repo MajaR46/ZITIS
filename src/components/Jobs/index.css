@@ -110,9 +110,7 @@
   flex-wrap: wrap;
 }
 }
-.save-button{
-  font-size: 22px;
-}
+
 .job-button{
   display: flex;
   align-items: center;
