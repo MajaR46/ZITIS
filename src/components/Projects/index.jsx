@@ -10,6 +10,7 @@ import PrimaryButton from "../buttons/PrimaryButton";
 
 const ProjectCard = ({
   id,
+  _id,
   projectTitle,
   projectDescription,
   projectStatus,
@@ -23,7 +24,6 @@ const ProjectCard = ({
   const [loggedInUser, setLoggedInUser] = useState(null);
 
   const navigate = useNavigate();
-
   const fetchLoggedInUser = async () => {
     const token = sessionStorage.getItem("token");
 
@@ -97,8 +97,8 @@ const ProjectCard = ({
     const commenterName = `${loggedInUser.firstName} ${loggedInUser.lastName}`;
     const newComment = {
       comment,
-      userId: loggedInUser.id,
-      projectId: id,
+      userId: loggedInUser._id,
+      projectId: _id,
     };
 
     try {
@@ -189,7 +189,6 @@ const ProjectCard = ({
       alert("Failed to update comment. Please try again.");
     }
   };
-
   return (
     <div className="job-list" key={id}>
       <div className="job-card">
@@ -213,23 +212,32 @@ const ProjectCard = ({
       </div>
       <div className="comment-section">
         {showCommentBox && (
-          <>
+          <div className="comment-box">
+            <button
+              className="closeCommentBox"
+              onClick={() => setShowCommentBox(false)}
+            >
+              X
+            </button>
             <textarea
               className="commentBox"
               placeholder="Add a comment..."
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             />
-            <button onClick={editCommentId ? updateComment : addComment}>
+            <button
+              className="addComment"
+              onClick={editCommentId ? updateComment : addComment}
+            >
               {editCommentId ? "Update Comment" : "Add Comment"}
             </button>
-          </>
+          </div>
         )}
         <button
-          className="addComment"
+          className={`toggleCommentBox ${showCommentBox ? "hideComment" : ""}`}
           onClick={() => setShowCommentBox(!showCommentBox)}
         >
-          {showCommentBox ? "Hide Comment" : "Add a Comment"}
+          {showCommentBox ? "Hide Section" : "Add a Comment"}
         </button>
         <div className="comments">
           {Array.isArray(comments) &&
