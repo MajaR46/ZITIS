@@ -92,9 +92,9 @@ exports.createUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     try {
-        const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const updatedUser = await User.findByIdAndUpdate(req.user.sub, req.body, { new: true });
         if (!updatedUser) {
-            return res.status(404).json({ message: 'Job not found' });
+            return res.status(404).json({ message: 'User not found' });
         }
         res.json(updatedUser);
     } catch (error) {
@@ -105,11 +105,11 @@ exports.updateUser = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
     try {
-        const deletedUser = await User.findByIdAndDelete(req.params.id);
+        const deletedUser = await User.findByIdAndDelete(req.user.sub);
         if (!deletedUser) {
-            return res.status(404).json({ message: 'Job not found' });
+            return res.status(404).json({ message: 'User not found' });
         }
-        res.json({ message: 'Job deleted' });
+        res.json({ message: 'User deleted' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: error.message });

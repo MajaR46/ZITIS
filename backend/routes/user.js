@@ -8,8 +8,8 @@ router.get('/', authMiddleware, userController.getAllUsers);
 router.get('/my-user', authMiddleware, userController.getCurrentUser);
 router.get('/:id', authMiddleware, userController.getUserById);
 router.post('/', userController.createUser);
-router.put('/:id', authMiddleware, userController.updateUser);
-router.delete('/:id', authMiddleware, userController.deleteUser);
+router.put('/', authMiddleware, userController.updateUser);
+router.delete('/', authMiddleware, userController.deleteUser);
 router.post('/savejob', authMiddleware, userController.saveJob);
 router.post('/token/refreshtoken', authMiddleware, userController.refreshToken)
 
