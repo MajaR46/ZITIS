@@ -94,43 +94,34 @@ exports.deleteJob = async (req, res) => {
   }
 };
 
-exports.sendNotification = async (req, res) => { //TODO: TRY/CATCH, ISTO SE NA PROJECTIH
+exports.sendNotification = async (req, res) => {
   try {
-    const sendingUserId = req.user.sub;
-    const jobId = req.body.jobId;
-    const receivingUserId = req.body.userId;
-
-    console.log(sendingUserId);
-    console.log(jobId);
-    console.log(receivingUserId);
+    const { sub: sendingUserId } = req.user;
+    const { jobId, userId: receivingUserId } = req.body;
 
     if (!sendingUserId || !jobId || !receivingUserId) {
-        return res.status(400).json({ message: 'User ID and Job ID are required' });
+      return res.status(400).json({ message: 'User ID and Job ID are required.' });
     }
 
-    const job = await Job.findOne({ _id: jobId });
-    if (!job) {
-      return res.status(404).json({ message: 'job not found' });
+    const [job, sendingUser, receivingUser] = await Promise.all([
+      Job.findById(jobId),
+      User.findById(sendingUserId),
+      User.findById(receivingUserId)
+    ]);
+
+    if (!job || !sendingUser || !receivingUser) {
+      return res.status(404).json({ message: `${!job ? 'Job' : !sendingUser ? 'Sending user' : 'Receiving user'} not found.` });
     }
 
-    const sendingUser = await User.findOne({ _id: sendingUserId });
-
-    const receivingUser = await User.findOne({ _id: receivingUserId });
-    if (!receivingUser) {
-      return res.status(404).json({ message: 'receivingUser not logged in/found' });
-    }
-
-    console.log(receivingUser);
-    console.log(sendingUser);
-
-    receivingUser.notifications.push(sendingUser.firstName + ' ' + sendingUser.lastName + 'is interested about your posted job:' + ' ' + job.company + ' ' + job.position + ' ' + job.role)
+    receivingUser.notifications.push(`${sendingUser.firstName} ${sendingUser.lastName} is interested in your posted job: ${job.company} ${job.position} ${job.role}`);
     await receivingUser.save();
 
-    res.json({ message: 'Notification sent successfully' });
+    res.json({ message: 'Notification sent successfully.' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error sending notification:', error);
+    res.status(500).json({ message: 'An error occurred while sending the notification. Please try again later.' });
   }
-}
+};
 
 exports.getUsersJobs = async (req, res) => {
   try {
