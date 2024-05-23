@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar";
+import PrimaryButton from "../buttons/PrimaryButton";
+import { useNavigate } from "react-router-dom";
 
 const SaveJobs = () => {
-  const jobsJSON = localStorage.getItem("Job");
-  const jobs = jobsJSON ? [JSON.parse(jobsJSON)] : null;
+  const [likedJobs, setLikedJobs] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedLikedJobs = JSON.parse(localStorage.getItem("LikedJobs")) || [];
+    setLikedJobs(storedLikedJobs);
+  }, []);
 
   return (
     <div>
@@ -16,15 +23,15 @@ const SaveJobs = () => {
         </div>
         <div className="job-section">
           <div className="job-page">
-            {jobs === null ? (
+            {likedJobs.length === 0 ? (
               <p>No saved jobs found.</p>
             ) : (
-              jobs.map(({ logo, company, position, location, role }, index) => (
-                <div className="job-list" key={index}>
+              likedJobs.map(({ _id, company, position, location, role }) => (
+                <div className="job-list" key={_id}>
                   <div className="job-card">
                     <div className="job-name">
                       <img
-                        src={require(`../../Assets/images/${logo}`)}
+                        src={require(`../../Assets/images/amazon.png`)}
                         alt="logo"
                         className="job-profile"
                       />
@@ -37,7 +44,12 @@ const SaveJobs = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="job-posting"></div>
+                    <div className="job-button">
+                      <PrimaryButton
+                        text="Apply Now"
+                        onClick={() => navigate("/apply-jobs")}
+                      />
+                    </div>
                   </div>
                 </div>
               ))

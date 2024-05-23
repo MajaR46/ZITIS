@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Navbar";
-import { Link } from "react-router-dom";
 import "./index.css";
-import {
-  AiOutlineHeart,
-  AiFillHeart,
-  AiOutlineEdit,
-  AiOutlineDelete,
-} from "react-icons/ai";
+import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import ProjectFilter from "../ProjectFilter";
 import PrimaryButton from "../buttons/PrimaryButton";
 
@@ -27,6 +21,7 @@ const ProjectCard = ({
   const [showCommentBox, setShowCommentBox] = useState(false);
   const [editCommentId, setEditCommentId] = useState(null);
   const [loggedInUser, setLoggedInUser] = useState(null);
+
   const navigate = useNavigate();
 
   const fetchLoggedInUser = async () => {
@@ -214,13 +209,6 @@ const ProjectCard = ({
             text="View project"
             onClick={() => navigate("/send-inquiry")}
           />
-          <Link to="/Projects">
-            {JSON.parse(localStorage.getItem("Job"))?.id === id ? (
-              <AiFillHeart />
-            ) : (
-              <AiOutlineHeart />
-            )}
-          </Link>
         </div>
       </div>
       <div className="comment-section">

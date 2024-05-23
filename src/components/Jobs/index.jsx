@@ -17,13 +17,17 @@ const Jobs = () => {
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [active, setActive] = useState(false);
   const [roles, setRoles] = useState([]);
   const navigate = useNavigate();
+  const [likedJobs, setLikedJobs] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     fetchJobs();
     fetchRoles();
+    fetchMyUser();
+    const storedLikedJobs = JSON.parse(localStorage.getItem("LikedJobs")) || [];
+    setLikedJobs(storedLikedJobs);
   }, []);
 
   const fetchJobs = async () => {
@@ -45,6 +49,30 @@ const Jobs = () => {
     }
   };
 
+  const fetchMyUser = async () => {
+    const token = sessionStorage.getItem("token");
+
+    try {
+      const response = await fetch(`http://localhost:3001/api/user/my-user`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Fetched User:", data);
+      setUser(data);
+    } catch (error) {
+      console.error("Error fetching current user:", error);
+      setUser(null);
+    }
+  };
+
   const handleJobFilter = async (role) => {
     try {
       const response = await axios.get(
@@ -57,8 +85,19 @@ const Jobs = () => {
   };
 
   const saveClick = (job) => {
-    window.localStorage.setItem("Job", JSON.stringify(job));
-    setActive(!active);
+    const isLiked = likedJobs.some((likedJob) => likedJob._id === job._id);
+    let updatedLikedJobs;
+
+    if (!isLiked) {
+      updatedLikedJobs = [...likedJobs, job];
+    } else {
+      updatedLikedJobs = likedJobs.filter(
+        (likedJob) => likedJob._id !== job._id
+      );
+    }
+
+    setLikedJobs(updatedLikedJobs);
+    localStorage.setItem("LikedJobs", JSON.stringify(updatedLikedJobs));
   };
 
   const searchEvent = (event) => {
@@ -101,6 +140,8 @@ const Jobs = () => {
     }
   };
 
+  const userRole = user ? user.role : null;
+
   return (
     <>
       <Navbar />
@@ -140,21 +181,24 @@ const Jobs = () => {
                       <Link
                         to="/Jobs"
                         onClick={() => {
-                          saveClick({
-                            _id,
-                            company,
-                            position,
-                            location,
-                            posted,
-                          });
+                          if (userRole !== "company") {
+                            saveClick({
+                              _id,
+                              company,
+                              position,
+                              location,
+                              posted,
+                            });
+                          }
                         }}
                       >
-                        {JSON.parse(localStorage.getItem("Job"))?._id ===
-                        _id ? (
-                          <AiFillHeart />
-                        ) : (
-                          <AiOutlineHeart />
-                        )}
+                        {userRole !== "company" ? (
+                          likedJobs.some((likedJob) => likedJob._id === _id) ? (
+                            <AiFillHeart />
+                          ) : (
+                            <AiOutlineHeart />
+                          )
+                        ) : null}
                       </Link>
                     </div>
                   </div>
