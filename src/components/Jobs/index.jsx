@@ -21,6 +21,7 @@ const Jobs = () => {
   const navigate = useNavigate();
   const [likedJobs, setLikedJobs] = useState([]);
   const [user, setUser] = useState(null);
+  const [jobImages, setJobImages] = useState([]);
 
   useEffect(() => {
     fetchJobs();
@@ -30,6 +31,18 @@ const Jobs = () => {
     setLikedJobs(storedLikedJobs);
   }, []);
 
+  useEffect(() => {
+    const fetchImages = async () => {
+      const context = require.context(
+        "../../Assets/images",
+        false,
+        /\.(png|jpg)$/
+      );
+      const images = context.keys().map(context);
+      setJobImages(images);
+    };
+    fetchImages();
+  }, []);
   const fetchJobs = async () => {
     try {
       const response = await axios.get("http://localhost:3001/api/job");
@@ -154,12 +167,12 @@ const Jobs = () => {
         <div className="job-section">
           <div className="job-page">
             {filteredJobs.map(
-              ({ _id, company, position, location, posted, role }) => (
+              ({ _id, company, position, location, posted, role }, index) => (
                 <div key={_id} className="job-list">
                   <div className="job-card">
                     <div className="job-name">
                       <img
-                        src={require(`../../Assets/images/amazon.png`)}
+                        src={jobImages[index]}
                         alt="logo"
                         className="job-profile"
                       />

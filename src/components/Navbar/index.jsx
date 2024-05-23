@@ -52,7 +52,7 @@ const Navbar = () => {
         {/* Conditionally render "Saved Jobs" menu item */}
         {userRole !== "company" && (
           <li>
-            <Link to="/saved-job">Saved Job</Link>
+            <Link to="/saved-job">Saved Jobs</Link>
           </li>
         )}
         <li>
