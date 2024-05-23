@@ -35,7 +35,6 @@ const Login = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                sessionStorage.setItem('user', JSON.stringify(data.user));
                 sessionStorage.setItem('token', data.token);
                 sessionStorage.setItem('refreshToken', data.refreshToken);
                 sessionStorage.setItem('expiresAt', data.expiresAt);

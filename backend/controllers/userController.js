@@ -28,6 +28,16 @@ exports.getUserById = async (req, res) => {
     }
 };
 
+exports.getCurrentUser = async (req, res) => {
+    try {
+        const userId = req.user.sub;
+        const user = await User.findById(userId);
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 exports.createUser = async (req, res) => {
     try {
         const { email, password, role, ...rest } = req.body;
