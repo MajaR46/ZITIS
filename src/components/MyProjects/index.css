@@ -176,3 +176,44 @@
   border-radius: 2px;
   cursor: pointer;
 }
+
+.job-button {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.edit-button,
+.delete-button {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-button {
+  background-color: #007bff;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
+  transition: 400ms ease-in-out;
+}
+
+.delete-button {
+  background-color: #dc3545;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+  transition: 400ms ease-in-out;
+}
+
+.save-button {
+  font-size: 22px;
+  color: #dc3545; /* Update heart icon color to match the delete button */
+  cursor: pointer;
+}
