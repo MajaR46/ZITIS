@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 
-//TODO: Implement backend logic to send inquiry to the project owner- if it is nedded
-
 const SendInquiry = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
