@@ -1,18 +1,28 @@
 import React, { useState } from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
+import sendPushNotification from "../../Notifications/sendPushNotification";
 
 const ApplyJobs = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
-  const OnformSubmit = () => {
+
+  const OnformSubmit = async () => {
     if (name === "") {
       alert("Please fill the name first");
     } else {
-      alert("Your Job Application has been Applied Successfully");
-      navigate("/Jobs");
+      try {
+        await sendPushNotification(
+          "Your job application has been submitted successfully!"
+        );
+        navigate("/Jobs");
+      } catch (error) {
+        console.error("Error submitting job application:", error);
+        alert("Failed to apply for job. Please try again later.");
+      }
     }
   };
+
   return (
     <div className="apply-job">
       <div className="container">

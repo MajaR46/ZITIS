@@ -51,14 +51,13 @@ self.addEventListener("fetch", (event) => {
   );
 });
 
-// not yet implemented
-// // listen for push notifications
-// self.addEventListener("push", (event) => {
-//   console.log("Push notification received: listening from the service worker");
-//   const payload = event.data ? event.data.text() : "no payload";
-//   event.waitUntil(
-//     self.registration.showNotification("Push Notification", {
-//       body: payload,
-//     })
-//   );
-// });
+// listen for push notifications
+self.addEventListener("push", (event) => {
+  console.log("Push notification received: listening from the service worker");
+  const payload = event.data ? event.data.text() : "no payload";
+  event.waitUntil(
+    self.registration.showNotification("Push Notification Melt", {
+      body: payload,
+    })
+  );
+});

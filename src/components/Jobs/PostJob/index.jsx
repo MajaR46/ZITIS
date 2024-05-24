@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../../Navbar";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
+import sendPushNotification from "../../Notifications/sendPushNotification";
 
 const PostJob = () => {
   const [company, setCompany] = useState("");
@@ -72,7 +73,7 @@ const PostJob = () => {
         }
         localStorage.setItem("jobs", JSON.stringify([...savedJobs, newJob]));
 
-        alert("Project Added Successfully");
+        await sendPushNotification("New jon added successfully!");
         navigate("/jobs");
       } else {
         const errorData = await response.json();

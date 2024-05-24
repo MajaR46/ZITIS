@@ -3,7 +3,7 @@ import Navbar from "../../Navbar";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 import SaveButton from "../../buttons/SaveButton";
-// TODO: Delete the userId input field, get the user id of the logged-in user from authentication token or session data, make the necessary changes in the database to automatically assign the user id to the project, and include authentication token or session data
+import sendPushNotification from "../../Notifications/sendPushNotification";
 
 const AddProject = () => {
   const navigate = useNavigate();
@@ -66,8 +66,8 @@ const AddProject = () => {
           "projects",
           JSON.stringify([...savedProjects, newProject])
         );
+        await sendPushNotification("New project added successfully!");
 
-        alert("Project Added Successfully");
         navigate("/my-projects");
       } else {
         const errorData = await response.json();
