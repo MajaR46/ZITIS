@@ -128,11 +128,14 @@ const ProjectCard = ({
 
   const deleteComment = async (commentId) => {
     try {
+      const token = sessionStorage.getItem("token");
       const response = await fetch(
         `http://localhost:3001/api/review/${commentId}`,
         {
           method: "DELETE",
-          Authorization: `Bearer ${token}`,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       if (response.ok) {
@@ -159,6 +162,7 @@ const ProjectCard = ({
 
   const updateComment = async () => {
     try {
+      const token = sessionStorage.getItem("token");
       const response = await fetch(
         `http://localhost:3001/api/review/${editCommentId}`,
         {
@@ -167,26 +171,21 @@ const ProjectCard = ({
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ comment }),
+          body: JSON.stringify({ comment: comment }),
         }
       );
       if (response.ok) {
         setComments(
-          comments.map((comment) =>
-            comment._id === editCommentId ? { ...comment, comment } : comment
+          comments.map((item) =>
+            item._id === editCommentId ? { ...item, comment: comment } : item
           )
         );
         setComment("");
         setEditCommentId(null);
         setShowCommentBox(false);
-      } else {
-        const errorData = await response.json();
-        console.error("Error updating comment:", errorData);
-        alert("Failed to update comment. Please try again.");
       }
     } catch (error) {
-      console.error("Error updating comment:", error);
-      alert("Failed to update comment. Please try again.");
+      console.error(error);
     }
   };
   return (
@@ -241,8 +240,8 @@ const ProjectCard = ({
         </button>
         <div className="comments">
           {Array.isArray(comments) &&
-            comments.map((comment, index) => (
-              <div key={index} className="comment">
+            comments.map((comment) => (
+              <div key={comment._id} className="comment">
                 <p>
                   <strong>{comment.userId}</strong>: {comment.comment}
                 </p>
