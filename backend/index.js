@@ -1,7 +1,7 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
 const connectDB = require("./database/db");
+const webpushHandler = require("./webpushconfig/webpushHandler");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -15,14 +15,14 @@ app.use(express.json());
 
 connectDB();
 
-
 app.use("/api/user", userRoutes);
 app.use("/api/review", reviewRoutes);
 app.use("/api/job", jobRoutes);
 app.use("/api/project", projectRoutes);
 
-
+app.post("/register-subscription", webpushHandler.registerSubscription);
+app.post("/send-notification", webpushHandler.sendNotification);
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

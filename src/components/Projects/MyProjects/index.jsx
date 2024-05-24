@@ -5,6 +5,7 @@ import EditProject from "../EditProject/EditProject";
 import ConfirmModal from "../../modals/ConfirmModal";
 import CancelButton from "../../buttons/CancelButton";
 import PrimaryButton from "../../buttons/PrimaryButton";
+import { displayInAppNotification } from "../../Notifications/sendAppNotifications";
 
 const MyProjects = () => {
   const [filteredProjects, setFilteredProjects] = useState([]);
@@ -58,6 +59,9 @@ const MyProjects = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+      displayInAppNotification("Success", {
+        body: "Your project has been updated successfully!",
+      });
 
       const updatedProject = await response.json();
       setFilteredProjects((prevProjects) =>
@@ -68,6 +72,9 @@ const MyProjects = () => {
       setIsEditing(null);
     } catch (error) {
       console.error("Error updating project:", error);
+      displayInAppNotification("Error", {
+        body: "An error occurred while updating your project. Please try again.",
+      });
     }
   };
 
@@ -89,6 +96,9 @@ const MyProjects = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+      displayInAppNotification("Success", {
+        body: "Your project has been deleted successfully!",
+      });
 
       setFilteredProjects((prevProjects) =>
         prevProjects.filter((project) => project._id !== projectToDelete)
@@ -97,6 +107,9 @@ const MyProjects = () => {
       setProjectToDelete(null);
     } catch (error) {
       console.error("Error deleting project:", error);
+      displayInAppNotification("Error", {
+        body: "An error occurred while deleting your project. Please try again.",
+      });
     }
   };
 

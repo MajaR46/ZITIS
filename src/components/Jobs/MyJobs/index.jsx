@@ -5,6 +5,7 @@ import EditJob from "../EditJob";
 import ConfirmModal from "../../modals/ConfirmModal";
 import CancelButton from "../../buttons/CancelButton";
 import PrimaryButton from "../../buttons/PrimaryButton";
+import { displayInAppNotification } from "../../Notifications/sendAppNotifications";
 
 const MyJobs = () => {
   const [filteredJobs, setFilteredJobs] = useState([]);
@@ -55,6 +56,9 @@ const MyJobs = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+      displayInAppNotification("Success", {
+        body: "Your job has been updated successfully!",
+      });
 
       const updatedJob = await response.json();
       setFilteredJobs((prevJobs) =>
@@ -63,6 +67,9 @@ const MyJobs = () => {
       setIsEditing(null);
     } catch (error) {
       console.error("Error updating job:", error);
+      displayInAppNotification("Error", {
+        body: "There was an error updating your job. Please try again.",
+      });
     }
   };
 
@@ -84,6 +91,9 @@ const MyJobs = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+      displayInAppNotification("Success", {
+        body: "Your job has been deleted successfully!",
+      });
 
       setFilteredJobs((prevJobs) =>
         prevJobs.filter((job) => job._id !== jobToDelete)
@@ -92,6 +102,9 @@ const MyJobs = () => {
       setJobToDelete(null);
     } catch (error) {
       console.error("Error deleting job:", error);
+      displayInAppNotification("Error", {
+        body: "There was an error deleting your job. Please try again.",
+      });
     }
   };
 
