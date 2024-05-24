@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
-
-//TODO: Implement backend logic to send inquiry to the project owner- if it is nedded
+import { displayInAppNotification } from "../Notifications/sendAppNotifications";
 
 const SendInquiry = () => {
   const navigate = useNavigate();
@@ -19,7 +18,10 @@ const SendInquiry = () => {
     if (formData.message === "") {
       alert("Please fill in the inquiry message first");
     } else {
-      alert("Your inquiry has been sent successfully!");
+      displayInAppNotification("Success", {
+        body: "Your inquiry has been sent successfully!",
+      });
+
       navigate("/projects");
     }
   };
