@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../Navbar";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
-
+import SaveButton from "../buttons/SaveButton";
 // TODO: Delete the userId input field, get the user id of the logged-in user from authentication token or session data, make the necessary changes in the database to automatically assign the user id to the project, and include authentication token or session data
 
 const AddProject = () => {
@@ -12,7 +12,6 @@ const AddProject = () => {
   const [projectStatus, setProjectStatus] = useState("");
   const [uploadDate, setUploadDate] = useState("");
   const [userId, setUserId] = useState("");
-
 
   const handleSubmitButton = async (e) => {
     e.preventDefault();
@@ -26,7 +25,13 @@ const AddProject = () => {
     const userIdFromToken = JSON.parse(atob(token.split(".")[1])).sub;
     setUserId(userIdFromToken);
 
-    if (projectTitle === "" || projectDescription === "" || projectStatus === "" || uploadDate === "" || userId === "") {
+    if (
+      projectTitle === "" ||
+      projectDescription === "" ||
+      projectStatus === "" ||
+      uploadDate === "" ||
+      userId === ""
+    ) {
       alert("All fields are required");
       return;
     }
@@ -44,7 +49,7 @@ const AddProject = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(projectData),
       });
@@ -63,7 +68,7 @@ const AddProject = () => {
         );
 
         alert("Project Added Successfully");
-        navigate("/projects");
+        navigate("/my-projects");
       } else {
         const errorData = await response.json();
         alert(`Error: ${errorData.message}`);
@@ -73,7 +78,6 @@ const AddProject = () => {
       alert("An error occurred while adding the project");
     }
   };
-
 
   return (
     <div>
@@ -147,9 +151,7 @@ const AddProject = () => {
             />
           </div>
           <div className="form-group">
-            <button type="submit" className="submit-button">
-              Submit
-            </button>
+            <SaveButton text="Submit" />
           </div>
         </form>
       </div>

@@ -12,7 +12,7 @@ const Navbar = () => {
       const response = await fetch(`http://localhost:3001/api/user/my-user`, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -49,9 +49,12 @@ const Navbar = () => {
         <li>
           <Link to="/jobs">Jobs</Link>
         </li>
-        <li>
-          <Link to="/saved-job">Saved Job</Link>
-        </li>
+        {/* Conditionally render "Saved Jobs" menu item */}
+        {userRole !== "company" && (
+          <li>
+            <Link to="/saved-job">Saved Jobs</Link>
+          </li>
+        )}
         <li>
           <Link to="/projects">Discover projects</Link>
         </li>

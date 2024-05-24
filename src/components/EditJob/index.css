@@ -1,0 +1,32 @@
+.edit-job-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.edit-job-form label {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+}
+
+.edit-job-form input,
+.edit-job-form textarea,
+.edit-job-form select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.edit-job-form select {
+    background-color: white;
+    cursor: pointer;
+}
+
+.edit-job-form input:focus,
+.edit-job-form textarea:focus,
+.edit-job-form select:focus {
+    border-color: #007bff;
+    outline: none;
+}

@@ -1,0 +1,32 @@
+.edit-project-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.edit-project-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+}
+
+.edit-project-form input,
+.edit-project-form textarea,
+.edit-project-form select {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.edit-project-form select {
+  background-color: white;
+  cursor: pointer;
+}
+
+.edit-project-form input:focus,
+.edit-project-form textarea:focus,
+.edit-project-form select:focus {
+  border-color: #007bff;
+  outline: none;
+}
