@@ -5,6 +5,7 @@ import ConfirmModal from "../../modals/ConfirmModal";
 import "./index.css";
 import PrimaryButton from "../../buttons/PrimaryButton";
 import CancelButton from "../../buttons/CancelButton";
+import { displayInAppNotification } from "../../Notifications/sendAppNotifications";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -51,12 +52,18 @@ const Profile = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+      displayInAppNotification("Success", {
+        body: "Your profile has been updated successfully!",
+      });
 
       const updatedUser = await response.json();
       setUser(updatedUser);
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating user:", error);
+      displayInAppNotification("Error", {
+        body: "An error occurred while updating your profile. Please try again.",
+      });
     }
   };
 
@@ -78,8 +85,16 @@ const Profile = () => {
 
       sessionStorage.clear();
       window.location.href = "/login";
+
+      displayInAppNotification("Success", {
+        body: "Your account has been successfully deleted!",
+      });
     } catch (error) {
       console.error("Error deleting user:", error);
+
+      displayInAppNotification("Error", {
+        body: "An error occurred while deleting your account. Please try again.",
+      });
     }
   };
 
