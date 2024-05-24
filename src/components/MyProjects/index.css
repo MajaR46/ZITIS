@@ -161,6 +161,18 @@
 }
 
 
+.edit-delete-button {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  background: Green;
+  color: White;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+
+
 
 .profile-button {
   align-items: center;
@@ -208,4 +220,3 @@
   background-color: #c82333;
   transition: 400ms ease-in-out;
 }
-

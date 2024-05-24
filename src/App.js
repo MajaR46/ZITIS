@@ -15,6 +15,7 @@ import SendInquiry from "./components/SendInquiry";
 import MyProjects from "./components/MyProjects";
 import SessionManager from "./components/SessionManager";
 import MyJobs from './components/MyJobs';
+import EditProject from "./components/EditProject";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             <Route path="/my-projects" element={<MyProjects />} />
             <Route path="/my-jobs" element={<MyJobs />} />
             <Route path="/send-inquiry" element={<SendInquiry />} />
+            <Route path="/edit-project/:id" element={<EditProject />} />
             <Route path="*" element={<ErrorPage />} />
           </Route>
         </Routes>
