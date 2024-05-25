@@ -13,6 +13,29 @@ const MyJobs = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [jobToDelete, setJobToDelete] = useState(null);
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "d" || event.key === "D") {
+        window.scrollTo({
+          top: window.scrollY + 200,
+          behavior: "smooth",
+        });
+      } else if (event.key === "u" || event.key === "U") {
+        window.scrollTo({
+          top: window.scrollY - 200,
+          behavior: "smooth",
+        });
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+
   const fetchMyJobs = async () => {
     const token = sessionStorage.getItem("token");
 

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../Navbar";
 import "./index.css";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import ProjectFilter from "../ProjectFilter";
 import PrimaryButton from "../../buttons/PrimaryButton";
+import useSpeech from "../../../hooks/speech";
 
 const ProjectCard = ({
   id,
@@ -262,10 +263,37 @@ const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState([]);
+  const [showCompleted, setShowCompleted] = useState(true);
 
   useEffect(() => {
     fetchProjects();
+
+
+
+    /////////////////////////KEYBOARD SHORTCUTS///////////////
+    const handleKeyDown = (event) => {
+      if (event.key === "d" || event.key === "D") {
+        window.scrollTo({
+          top: window.scrollY + 200,
+          behavior: "smooth",
+        });
+      } else if (event.key === "u" || event.key === "U") {
+        window.scrollTo({
+          top: window.scrollY - 200,
+          behavior: "smooth",
+        });
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [selectedStatus]);
+
+
+
 
   const fetchProjects = async () => {
     let url = "http://localhost:3001/api/project";
@@ -285,6 +313,21 @@ const Projects = () => {
       setProjects([]);
     }
   };
+
+  const handleKeyboardShortcut = (event) => {
+    if (event.key === "c" || event.key === "C") {
+      setShowCompleted(!showCompleted);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyboardShortcut);
+    return () => {
+      window.removeEventListener("keydown", handleKeyboardShortcut);
+    };
+  }, [showCompleted]);
+
+  const filteredProjects = showCompleted ? projects : projects.filter(project => project.projectStatus !== "In Progress" && project.projectStatus !== "Pending");
 
   const fetchProjectsByTitle = async () => {
     if (searchTerm.length < 3) {
@@ -337,7 +380,7 @@ const Projects = () => {
         <div className="job-section">
           <div className="job-page">
             {Array.isArray(projects) &&
-              projects.map((project) => (
+              filteredProjects.map((project) => (
                 <ProjectCard key={project._id} {...project} />
               ))}
           </div>

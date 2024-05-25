@@ -73,6 +73,9 @@ function sendSubscriptionToServer(subscription) {
   console.log("Subscription sent to server.");
 }
 
+
+
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(

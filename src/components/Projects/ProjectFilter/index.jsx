@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import "./index.css";
+
 
 const projectStatus = [
   { label: "All", value: "All" },
@@ -56,7 +58,10 @@ const ProjectFilter = ({ handleStatusFilter, searchEvent }) => {
                   />
                   {filter.label}
                 </li>
+
               ))}
+
+              <p class="shortcut">Press "c" to only show completed projects!</p>
             </ul>
           </div>
         </div>

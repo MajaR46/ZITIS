@@ -13,6 +13,7 @@ const AddProject = () => {
   const [uploadDate, setUploadDate] = useState("");
   const [userId, setUserId] = useState("");
 
+
   const handleSubmitButton = async (e) => {
     e.preventDefault();
 
@@ -23,25 +24,25 @@ const AddProject = () => {
       return;
     }
     const userIdFromToken = JSON.parse(atob(token.split(".")[1])).sub;
-    setUserId(userIdFromToken);
 
     if (
       projectTitle === "" ||
       projectDescription === "" ||
       projectStatus === "" ||
-      uploadDate === "" ||
-      userId === ""
+      uploadDate === ""
     ) {
       alert("All fields are required");
       return;
     }
+
+    setUserId(userIdFromToken);
 
     const projectData = {
       projectTitle,
       projectDescription,
       projectStatus,
       uploadDate,
-      userId,
+      userId: userIdFromToken,
     };
 
     try {
