@@ -16,12 +16,14 @@ const experience = [
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
-  const [setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [roles, setRoles] = useState([]);
   const navigate = useNavigate();
   const [likedJobs, setLikedJobs] = useState([]);
   const [user, setUser] = useState(null);
   const [jobImages, setJobImages] = useState([]);
+
+
 
   useEffect(() => {
     fetchJobs();
@@ -29,6 +31,26 @@ const Jobs = () => {
     fetchMyUser();
     const storedLikedJobs = JSON.parse(localStorage.getItem("LikedJobs")) || [];
     setLikedJobs(storedLikedJobs);
+
+    const handleKeyDown = (event) => {
+      if (event.key === "d" || event.key === "D") {
+        window.scrollTo({
+          top: window.scrollY + 200,
+          behavior: "smooth",
+        });
+      } else if (event.key === "u" || event.key === "U") {
+        window.scrollTo({
+          top: window.scrollY - 200,
+          behavior: "smooth",
+        });
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   useEffect(() => {

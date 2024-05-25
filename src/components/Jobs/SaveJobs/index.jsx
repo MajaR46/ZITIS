@@ -12,6 +12,20 @@ const SaveJobs = () => {
   useEffect(() => {
     const storedLikedJobs = JSON.parse(localStorage.getItem("LikedJobs")) || [];
     setLikedJobs(storedLikedJobs);
+    const handleKeyDown = (event) => {
+      if (event.key === "s" || event.key === "S") {
+        window.scrollTo({
+          top: window.scrollY + 200,
+          behavior: "smooth",
+        });
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   useEffect(() => {

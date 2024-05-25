@@ -18,6 +18,7 @@ import MyJobs from "./components/Jobs/MyJobs";
 import EditProject from "./components/Projects/EditProject";
 
 function App() {
+  
   return (
     <>
       <BrowserRouter>

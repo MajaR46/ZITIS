@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./index.css";
+import useSpeech from "../../hooks/speech";
 
 const Navbar = () => {
   const [user, setUser] = useState(null);
@@ -34,6 +35,21 @@ const Navbar = () => {
   }, []);
 
   const userRole = user ? user.role : null;
+
+  const { speak } = useSpeech({
+    "go to home": () => document.getElementById("home-link").click(),
+    "go to jobs": () => document.getElementById("jobs-link").click(),
+    "go to saved jobs": () => document.getElementById("saved-jobs-link").click(),
+    "go to discover projects": () => document.getElementById("projects-link").click(),
+    "go to add projects": () => document.getElementById("add-projects-link").click(),
+    "go to admin dashboard": () => document.getElementById("admin-dashboard-link").click(),
+    "go to my profile": () => document.getElementById("my-profile-link").click(),
+    "go to my projects": () => document.getElementById("my-projects-link").click(),
+    "go to post a project": () => document.getElementById("post-project-link").click(),
+    "go to my jobs": () => document.getElementById("my-jobs-link").click(),
+    "go to post a job": () => document.getElementById("post-job-link").click(),
+    "go to login": () => document.getElementById("login-link").click(),
+  });
 
   return (
     <nav id="navbar">

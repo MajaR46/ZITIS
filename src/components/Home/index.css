@@ -4,20 +4,42 @@
   justify-content: center;
   flex-direction: column;
 }
-.title > h3 {
+
+.title>h3 {
   text-align: center;
   color: #fff;
   font-weight: bold;
   margin-bottom: 20px;
 }
+
 span {
   color: #f7cc53;
 }
+
 .button {
   text-align: center;
-  display: flex;
-  flex-direction: column;
+  display: inline-block;
+  text-decoration: none;
 }
+
+.button>span {
+  display: inline-block;
+  border: 2px solid #f7cc53;
+  border-radius: 20px;
+  padding: 20px;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: bold;
+  transition: background 1.2s ease, color 0.5s ease, border-color 0.5s ease;
+}
+
+.button:hover>span {
+  background: #f7cc53;
+  transition: 1.2s ease;
+  color: black;
+  border-color: #fff;
+}
+
 .button a {
   flex-direction: column;
   text-decoration: none;
@@ -28,12 +50,9 @@ span {
   color: #fff;
   font-weight: bold;
 }
-.button a:hover {
-  background: #f7cc53;
-  transition: 1.2s ease;
-  color: black;
-  border: 2px solid #fff;
-}
+
+
+
 .small-tagline {
   font-size: 20px;
   display: flex;
@@ -41,22 +60,26 @@ span {
   flex-direction: column;
   text-align: center;
 }
+
 .small-tagline p {
   color: #fff;
   top: 50%;
   opacity: 0.7;
   margin-bottom: 30px;
 }
+
 .social-media {
   display: flex;
   justify-content: center;
   gap: 20px;
 }
-.social-media > img {
+
+.social-media>img {
   width: 70px;
 }
-  @media (max-width: 640px){
-    .title{
-      font-size: 25px;
-    }
+
+@media (max-width: 640px) {
+  .title {
+    font-size: 25px;
   }
+}
