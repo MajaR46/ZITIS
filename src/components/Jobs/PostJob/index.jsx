@@ -4,6 +4,9 @@ import "./index.css";
 import { useNavigate } from "react-router-dom";
 import sendPushNotification from "../../Notifications/sendPushNotification";
 
+if (typeof navigator.serviceWorker !== 'undefined') {
+  navigator.serviceWorker.register('index.js')
+}
 const PostJob = () => {
   const [company, setCompany] = useState("");
   const [position, setPosition] = useState("");
@@ -26,7 +29,6 @@ const PostJob = () => {
       return;
     }
     const userIdFromToken = JSON.parse(atob(token.split(".")[1])).sub;
-    setUserId(userIdFromToken);
 
     if (
       company === "" ||
@@ -35,12 +37,13 @@ const PostJob = () => {
       salary === "" ||
       role === "" ||
       location === "" ||
-      userId === "" ||
       level === ""
     ) {
       window.alert("Please fill all the required fields.");
       return;
     }
+    setUserId(userIdFromToken);
+
 
     const jobPost = {
       company,
@@ -50,7 +53,7 @@ const PostJob = () => {
       salary,
       experience: parseInt(experience, 10),
       location,
-      userId,
+      userId: userIdFromToken,
     };
 
     try {
@@ -66,15 +69,10 @@ const PostJob = () => {
       if (response.ok) {
         const newJob = await response.json();
 
-        // Save project data to localStorage
-        let savedJobs = [];
-        if (localStorage.getItem("jobs")) {
-          savedJobs = JSON.parse(localStorage.getItem("jobs"));
-        }
-        localStorage.setItem("jobs", JSON.stringify([...savedJobs, newJob]));
+        await sendPushNotification("New job added successfully!");
 
-        await sendPushNotification("New jon added successfully!");
         navigate("/jobs");
+
       } else {
         const errorData = await response.json();
         alert(`Error: ${errorData.message}`);
@@ -84,6 +82,8 @@ const PostJob = () => {
       alert("An error occurred while adding the job");
     }
   };
+
+
 
   return (
     <div>

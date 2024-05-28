@@ -30,7 +30,6 @@ const useSpeech = (commands) => {
 
         recognition.onstart = () => {
             setListening(true);
-            console.log("Voice recognition started. Try speaking into the microphone.");
         };
 
         recognition.onresult = (event) => {
@@ -48,7 +47,6 @@ const useSpeech = (commands) => {
 
         recognition.onend = () => {
             setListening(false);
-            console.log("Voice recognition ended.");
         };
 
         recognitionRef.current = recognition;

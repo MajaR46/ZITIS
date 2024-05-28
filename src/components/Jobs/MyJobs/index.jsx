@@ -6,6 +6,8 @@ import ConfirmModal from "../../modals/ConfirmModal";
 import CancelButton from "../../buttons/CancelButton";
 import PrimaryButton from "../../buttons/PrimaryButton";
 import { displayInAppNotification } from "../../Notifications/sendAppNotifications";
+import useSpeech from "../../..//hooks/speech";
+
 
 const MyJobs = () => {
   const [filteredJobs, setFilteredJobs] = useState([]);
@@ -13,6 +15,8 @@ const MyJobs = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [jobToDelete, setJobToDelete] = useState(null);
 
+
+  ////////////////////////KEYBOARD SHORTCUTS ////////////////
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "d" || event.key === "D") {
@@ -34,6 +38,38 @@ const MyJobs = () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+
+  ////////////////////////// VOICE COMMANDS ///////////////////////////////////
+
+  const handleEditMyJob = () => {
+    speak("Entering edit job mode");
+    setIsEditing(true);
+  };
+
+  const handleDeleteMyJob = () => {
+    speak("Are you sure?")
+    confirmDelete();
+  }
+
+  const confimDeleteJob = () => {
+    proceedDelete();
+  }
+  const cancelDeleteJob = () => {
+    cancelDelete();
+  }
+
+  const commands = {
+    "edit job": handleEditMyJob,
+    "delete job": handleDeleteMyJob,
+    "yes": confimDeleteJob,
+    'no': cancelDeleteJob
+  };
+
+  const { speak } = useSpeech(commands);
+
+
+
 
 
   const fetchMyJobs = async () => {
