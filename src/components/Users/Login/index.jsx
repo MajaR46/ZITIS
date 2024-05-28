@@ -37,7 +37,6 @@ const Login = () => {
         sessionStorage.setItem("token", data.token);
         sessionStorage.setItem("refreshToken", data.refreshToken);
         sessionStorage.setItem("expiresAt", data.expiresAt);
-        alert("Login successful!");
         navigate("/Profile");
       } else {
         const data = await response.json();
@@ -93,7 +92,7 @@ const Login = () => {
             <button className="profile-button" onClick={handleRegister}>
               Register
             </button>{" "}
-            {}
+            { }
           </div>
         </form>
       </div>

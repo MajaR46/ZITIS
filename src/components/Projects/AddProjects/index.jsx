@@ -57,16 +57,6 @@ const AddProject = () => {
 
       if (response.ok) {
         const newProject = await response.json();
-
-        // Save project data to localStorage
-        let savedProjects = [];
-        if (localStorage.getItem("projects")) {
-          savedProjects = JSON.parse(localStorage.getItem("projects"));
-        }
-        localStorage.setItem(
-          "projects",
-          JSON.stringify([...savedProjects, newProject])
-        );
         await sendPushNotification("New project added successfully!");
 
         navigate("/my-projects");

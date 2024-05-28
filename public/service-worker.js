@@ -1,8 +1,14 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-undef */
 
+
+
+//REDUX
+
 const CACHE_NAME = "melt-cache";
 const urlsToCache = ["/index.html", "/manifest.json", "/logo.png"];
+const SYNC_JOB_KEY = "sync-job";
+
 
 // cache files when the service worker installs
 self.addEventListener("install", function (event) {
@@ -61,3 +67,5 @@ self.addEventListener("push", (event) => {
     })
   );
 });
+
+

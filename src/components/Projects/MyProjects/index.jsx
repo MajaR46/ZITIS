@@ -6,6 +6,8 @@ import ConfirmModal from "../../modals/ConfirmModal";
 import CancelButton from "../../buttons/CancelButton";
 import PrimaryButton from "../../buttons/PrimaryButton";
 import { displayInAppNotification } from "../../Notifications/sendAppNotifications";
+import useSpeech from "../../..//hooks/speech";
+
 
 const MyProjects = () => {
   const [filteredProjects, setFilteredProjects] = useState([]);
@@ -13,6 +15,7 @@ const MyProjects = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState(null);
 
+  ////////////////////////KEYBOARD SHORTCUTS ////////////////
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "d" || event.key === "D") {
@@ -34,6 +37,38 @@ const MyProjects = () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+
+  ////////////////////////// VOICE COMMANDS ///////////////////////////////////
+
+  const handleEditMyProject = () => {
+    speak("Entering edit project mode");
+    setIsEditing(true);
+  };
+
+  const handleDeleteMyProject = () => {
+    speak("Are you sure?")
+    confirmDelete();
+  }
+
+  const confimDeleteProject = () => {
+    proceedDelete();
+  }
+  const cancelDeleteProject = () => {
+    cancelDelete();
+  }
+
+  const commands = {
+    "edit project": handleEditMyProject,
+    "delete project": handleDeleteMyProject,
+    "yes": confimDeleteProject,
+    'no': cancelDeleteProject
+  };
+
+  const { speak } = useSpeech(commands);
+
+
+
 
   const fetchMyProjects = async () => {
     const token = sessionStorage.getItem("token");

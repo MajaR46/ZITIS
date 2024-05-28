@@ -6,12 +6,30 @@ import "./index.css";
 import PrimaryButton from "../../buttons/PrimaryButton";
 import CancelButton from "../../buttons/CancelButton";
 import { displayInAppNotification } from "../../Notifications/sendAppNotifications";
-import useSpeech from "../../..//hooks/speech"; // Ensure the hook is in the correct path
+import useSpeech from "../../..//hooks/speech";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+
+  ////////////////////////////////////// KEYBOARD SHORTCUTS ////////////////
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "d" || event.key === "D") {
+        window.scrollTo({ top: window.scrollY + 200, behavior: "smooth" });
+      } else if (event.key === "u" || event.key === "U") {
+        window.scrollTo({ top: window.scrollY - 200, behavior: "smooth" });
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+
+  /////////////////////////////////////// VOICE COMMANDS //////////////////////// 
 
   const handleEditProfile = () => {
     speak("Entering edit profile mode");
@@ -45,6 +63,10 @@ const Profile = () => {
 
   const { speak } = useSpeech(commands);
 
+
+
+
+
   useEffect(() => {
     const fetchMyUser = async () => {
       const token = sessionStorage.getItem("token");
@@ -67,17 +89,6 @@ const Profile = () => {
     fetchMyUser();
   }, []);
 
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "d" || event.key === "D") {
-        window.scrollTo({ top: window.scrollY + 200, behavior: "smooth" });
-      } else if (event.key === "u" || event.key === "U") {
-        window.scrollTo({ top: window.scrollY - 200, behavior: "smooth" });
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
 
   const handleUpdateUser = async (formData) => {
     const token = sessionStorage.getItem("token");
