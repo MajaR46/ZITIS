@@ -37,6 +37,8 @@ const jobSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
+}, {
+  collection: "Jobs",
 });
 
 const Job = mongoose.model('Job', jobSchema);

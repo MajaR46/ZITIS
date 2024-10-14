@@ -19,7 +19,9 @@ const projectSchema = new mongoose.Schema({
         required: false
     },
 
-});
+}, {
+    collection: "Projects",
+  });
 
 const Project = mongoose.model('Project', projectSchema);
 

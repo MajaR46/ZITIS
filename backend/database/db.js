@@ -8,6 +8,8 @@ const connectDB = async () => {
         await mongoose.connect(uri, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
+            dbName: "MELT"
+
         });
         console.log("MongoDB database connection established successfully");
     } catch (error) {

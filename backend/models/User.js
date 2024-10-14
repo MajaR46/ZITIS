@@ -50,6 +50,8 @@ const userSchema = mongoose.Schema({
     type: [String],
     required: false
   }
+}, {
+  collection: "Users",
 });
 
 const User = mongoose.model("User", userSchema);

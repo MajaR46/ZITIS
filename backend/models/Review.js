@@ -6,7 +6,9 @@ const reviewSchema = new Schema({
     userId: { type: String, required: true },
     projectId: { type: String, required: true },
     posted: { type: Date, default: Date.now },
-});
+}, {
+    collection: "Reviews",
+  });
 
 const Review = mongoose.model("Review", reviewSchema);
 
