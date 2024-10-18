@@ -7,7 +7,8 @@ const ApplyJobs = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
 
-  const OnformSubmit = async () => {
+  const OnformSubmit = async (event) => {
+    event.preventDefault();
     if (name === "") {
       alert("Please fill the name first");
     } else {
@@ -15,12 +16,14 @@ const ApplyJobs = () => {
         await sendPushNotification(
           "Your job application has been submitted successfully!"
         );
-        navigate("/Jobs");
       } catch (error) {
         console.error("Error submitting job application:", error);
         alert("Failed to apply for job. Please try again later.");
       }
     }
+    window.alert("You applied sucessfuly to a job")
+    navigate("/jobs");
+
   };
 
   return (
